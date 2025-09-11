@@ -330,10 +330,12 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             if (dom.formPedido.dataset.editingId) {
-                const index = state.pedidos.findIndex(p => p.id === novoPedido.id);
+                const idToUpdate = parseInt(dom.formPedido.dataset.editingId);
+                const index = state.pedidos.findIndex(p => p.id === idToUpdate);
                 if (index !== -1) {
                     state.pedidos[index] = { ...state.pedidos[index], ...novoPedido };
                 }
+                delete dom.formPedido.dataset.editingId;
             } else {
                 state.pedidos.push(novoPedido);
             }
@@ -774,19 +776,27 @@ document.addEventListener('DOMContentLoaded', () => {
             dom.reportSearchAno043.innerHTML = `<option value="">Todos os Anos</option>` + lancamentoYears.map(year => `<option value="${year}">${year}</option>`).join('');
         },
         generateReport: () => {
-            const { reportSearchLoja043, reportSearchData043, reportSearchMes043, reportSearchAno043, reportSearchTipo043, relatorioTipo043 } = dom;
-            const lancamentosRelatorio = state.lancamentos.filter(l => {
+            const reportType = dom.relatorioTipo043.value;
+            const searchFilters = {
+                loja: dom.reportSearchLoja043.value,
+                data: dom.reportSearchData043.value,
+                mes: dom.reportSearchMes043.value,
+                ano: dom.reportSearchAno043.value,
+                tipo: dom.reportSearchTipo043.value,
+            };
+
+            let lancamentosRelatorio = state.lancamentos.filter(l => {
                 const lancamentoDate = new Date(l.data + 'T00:00:00');
                 return (
-                    (!reportSearchLoja043.value || l.loja === reportSearchLoja043.value) &&
-                    (!reportSearchData043.value || l.data === reportSearchData043.value) &&
-                    (!reportSearchMes043.value || (lancamentoDate.getMonth() + 1).toString().padStart(2, '0') === reportSearchMes043.value) &&
-                    (!reportSearchAno043.value || lancamentoDate.getFullYear().toString() === reportSearchAno043.value) &&
-                    (!reportSearchTipo043.value || l.tipo === reportSearchTipo043.value)
+                    (!searchFilters.loja || l.loja === searchFilters.loja) &&
+                    (!searchFilters.data || l.data === searchFilters.data) &&
+                    (!searchFilters.mes || (lancamentoDate.getMonth() + 1).toString().padStart(2, '0') === searchFilters.mes) &&
+                    (!searchFilters.ano || lancamentoDate.getFullYear().toString() === searchFilters.ano) &&
+                    (!searchFilters.tipo || l.tipo === searchFilters.tipo)
                 );
             });
         
-            if (relatorioTipo043.value === 'soma-total') {
+            if (reportType === 'soma-total') {
                 controle043Module.renderReportSintetico(lancamentosRelatorio);
             } else {
                 controle043Module.renderReportDetalhado(lancamentosRelatorio);
@@ -851,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>Totais de Lançamentos</h4>
                     <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(grandTotalCredito)}</span></p>
                     <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(grandTotalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
+                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldoGeral)}</span></p>
                 </div>
             `;
         },
