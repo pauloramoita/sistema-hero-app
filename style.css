@@ -11,7 +11,7 @@
     --cor-perigo: #dc3545;
 }
 
-/* Base e Estilos Globais */
+/* Base e Estilos Globais para Telas Pequenas */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -27,7 +27,7 @@ body {
     flex-direction: column;
 }
 
-/* Layout Principal */
+/* Cabeçalho */
 .header-container {
     background-color: var(--preto-principal);
     color: var(--branco);
@@ -49,35 +49,52 @@ body {
     height: auto;
 }
 
+/* Contêiner principal do aplicativo */
 .app-container {
     display: flex;
+    flex-direction: column; /* Padrão mobile: colunas */
     flex: 1;
 }
 
+/* Menus de Navegação */
 .main-sidebar, .sub-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 0.5rem;
+    gap: 0;
+    justify-content: flex-start;
+    align-items: center;
     background-color: var(--preto-principal);
-    display: flex;
-    flex-direction: column;
-    padding: 1.25rem 0;
-    gap: 0.5rem;
-}
-
-.main-sidebar {
-    width: 250px;
-    background-color: var(--preto-principal);
-    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sub-sidebar {
-    width: 220px;
     background-color: var(--cinza-escuro);
 }
 
+.nav-button {
+    background-color: transparent;
+    border: none;
+    color: var(--branco);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9em;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+}
+
+.nav-button:hover,
+.nav-button.active {
+    background-color: var(--vermelho-principal);
+}
+
+/* Conteúdo */
 .main-tab-content {
     display: none;
     width: 100%;
-    height: 100%;
-    flex-direction: row;
+    flex-direction: column;
 }
 
 .main-tab-content.active {
@@ -87,54 +104,7 @@ body {
 
 .sub-content {
     flex: 1;
-    padding: 2rem;
-    overflow-y: auto;
-}
-
-/* Botões de Navegação */
-.nav-button {
-    background-color: transparent;
-    border: none;
-    color: var(--branco);
-    text-align: left;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    font-size: 1.1em;
-    padding: 1rem 1.25rem;
-}
-
-.nav-button:hover,
-.nav-button.active {
-    background-color: var(--vermelho-principal);
-    transform: translateX(5px);
-}
-
-.main-tab-button {
-    font-size: 1.2em;
-    padding: 1.25rem;
-}
-
-.sub-tab-button {
-    background-color: transparent;
-    font-size: 1em;
-    padding: 0.75rem 1rem;
-}
-
-.sub-tab-button:hover,
-.sub-tab-button.active {
-    background-color: var(--preto-principal);
-}
-
-.alert-icon {
-    color: var(--cor-aviso);
-    font-weight: bold;
-    margin-left: 0.3rem;
-}
-
-/* Conteúdo das Seções */
-.content {
-    flex: 1;
-    padding: 2rem;
+    padding: 1rem;
     overflow-y: auto;
 }
 
@@ -182,16 +152,12 @@ h2, h3 {
 
 .input-with-button {
     display: flex;
+    flex-direction: column;
     gap: 0.5rem;
-    align-items: center;
 }
 
-.input-with-button input {
-    flex: 1;
-}
-
-.input-with-button button {
-    padding: 0.75rem 1rem;
+.input-with-button input, .input-with-button button {
+    width: 100%;
 }
 
 /* Botões de Ação */
@@ -208,6 +174,8 @@ h2, h3 {
     cursor: pointer;
     font-size: 1em;
     transition: background-color 0.3s;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 .btn-submit:hover,
@@ -229,17 +197,16 @@ h2, h3 {
 /* Campos de Pesquisa e Relatórios */
 .search-container {
     display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: stretch;
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
 
 .search-fields {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 1rem;
-    flex: 1;
 }
 
 .search-input {
@@ -323,8 +290,8 @@ table tr:last-child td {
 /* Estilos de Campos Específicos */
 .campos-container {
     display: flex;
+    flex-direction: column;
     gap: 2rem;
-    flex-wrap: wrap;
 }
 
 .campos-group {
@@ -345,6 +312,7 @@ table tr:last-child td {
 
 .campos-group form {
     display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     margin-bottom: 1rem;
 }
@@ -431,8 +399,8 @@ table tr:last-child td {
 /* Estilos para a nova aba de Backup */
 .backup-options-container {
     display: flex;
+    flex-direction: column;
     gap: 2rem;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
@@ -461,85 +429,76 @@ table tr:last-child td {
     color: var(--cinza-escuro);
 }
 
-/* Responsividade: Layout para telas de celular */
-@media (max-width: 768px) {
-    /* Layout principal para telas pequenas */
+/* A partir daqui, as regras se aplicam apenas a telas maiores que 768px */
+@media (min-width: 769px) {
     .app-container {
-        flex-direction: column;
-    }
-
-    /* Esconde o menu lateral no celular e o transforma em um menu superior */
-    .main-sidebar {
-        display: none;
-    }
-    
-    .sub-sidebar {
-        width: 100%;
         flex-direction: row;
-        overflow-x: auto;
-        padding: 0.5rem;
-        gap: 0;
-        justify-content: flex-start;
-        align-items: center;
-        background-color: var(--preto-principal); /* Cor de fundo da barra superior */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 5;
     }
     
-    .sub-sidebar .nav-button {
-        flex-shrink: 0;
-        text-align: center;
+    .main-sidebar {
+        width: 250px;
+        flex-direction: column;
+        padding: 1.25rem 0;
+        gap: 0.5rem;
+    }
+
+    .sub-sidebar {
+        width: 220px;
+        flex-direction: column;
+        padding: 1.25rem 0;
+        background-color: var(--cinza-escuro);
+        position: static;
+    }
+
+    .nav-button {
+        text-align: left;
+        font-size: 1.1em;
+        padding: 1rem 1.25rem;
+    }
+
+    .nav-button:hover,
+    .nav-button.active {
+        transform: translateX(5px);
+    }
+    
+    .sub-tab-button {
+        font-size: 1em;
         padding: 0.75rem 1rem;
-        white-space: nowrap;
-        font-size: 0.9em;
-        border-radius: 5px;
-        transform: none;
     }
 
-    .sub-sidebar .nav-button:hover {
-        transform: none;
-    }
-
-    .main-tab-content {
-        flex-direction: column;
-    }
-    
     .main-tab-content.active {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .sub-content {
-        padding: 1rem;
+        flex-direction: row;
     }
 
-    /* Reorganiza os campos de busca e formulários em colunas */
-    .search-container, .report-options {
-        flex-direction: column;
-        align-items: stretch;
+    .sub-content {
+        padding: 2rem;
+    }
+
+    .search-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-end;
     }
     
     .search-fields {
-        flex-direction: column;
-        gap: 1rem;
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 
     .form-group, .campos-group form {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .input-with-button {
-        flex-direction: column;
+        flex-direction: row;
     }
     
-    .input-with-button input, .input-with-button button {
-        width: 100%;
+    .input-with-button {
+        flex-direction: row;
+    }
+
+    .btn-submit, .btn-search, .btn-generate, .input-with-button button {
+        width: auto;
+        margin-top: 0;
     }
 
     .backup-options-container {
-        flex-direction: column;
+        flex-direction: row;
     }
 }
