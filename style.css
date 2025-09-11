@@ -489,4 +489,21 @@ table tr:last-child td {
     .backup-options-container {
         flex-direction: column;
     }
+
+    .content {
+        padding: 1rem;
+    }
+
+    .sub-content {
+        padding: 1rem;
+    }
+
+    .search-container, .report-options {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-fields {
+        flex-direction: column;
+    }
 }
