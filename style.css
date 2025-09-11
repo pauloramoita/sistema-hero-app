@@ -468,22 +468,27 @@ table tr:last-child td {
         flex-direction: column;
     }
 
+    /* Esconde o menu lateral no celular e o transforma em um menu superior */
     .main-sidebar {
+        display: none;
+    }
+    
+    .sub-sidebar {
         width: 100%;
         flex-direction: row;
         overflow-x: auto;
         padding: 0.5rem;
         gap: 0;
-        justify-content: space-around;
+        justify-content: flex-start;
         align-items: center;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        background-color: var(--preto-principal);
-        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+        background-color: var(--preto-principal); /* Cor de fundo da barra superior */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 5;
     }
     
-    .main-sidebar .nav-button {
+    .sub-sidebar .nav-button {
         flex-shrink: 0;
         text-align: center;
         padding: 0.75rem 1rem;
@@ -493,37 +498,20 @@ table tr:last-child td {
         transform: none;
     }
 
-    .main-sidebar .nav-button.active {
+    .sub-sidebar .nav-button:hover {
         transform: none;
     }
 
-    .sub-sidebar {
-        width: 100%;
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 0.5rem;
-        gap: 0;
-        justify-content: space-around;
-        align-items: center;
-        background-color: var(--cinza-escuro);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    .sub-sidebar .nav-button {
-        flex-shrink: 0;
-        text-align: center;
-        padding: 0.5rem 0.75rem;
-        white-space: nowrap;
-        font-size: 0.8em;
-        border-radius: 5px;
-    }
-    
     .main-tab-content {
         flex-direction: column;
-        padding-bottom: 70px; /* Para não esconder o conteúdo atrás do menu inferior */
     }
-
-    .content, .sub-content {
+    
+    .main-tab-content.active {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .sub-content {
         padding: 1rem;
     }
 
