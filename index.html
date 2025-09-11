@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Hero</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+    <header class="header-container" id="header-app">
+        <img src="hero-logo.png" alt="Logo do Sistema Hero" class="hero-logo">
+        <h1 class="hero-title">Sistema Hero</h1>
+    </header>
+
+    <div class="app-container">
+        <aside class="sidebar main-sidebar active" aria-label="Navegação principal">
+            <button class="nav-button main-tab-button active" data-target="pedidos-container" aria-label="Acessar Pedidos">Pedidos</button>
+            <button class="nav-button main-tab-button" data-target="controle-043-container" aria-label="Acessar Controle 043">Controle 043</button>
+            <button class="nav-button main-tab-button" data-target="financeiro-container" aria-label="Acessar Financeiro">Financeiro</button>
+            <button class="nav-button main-tab-button" data-target="backup-container" aria-label="Acessar Backup e Restauração">Backup</button>
+        </aside>
+
+        <main class="content" aria-label="Conteúdo principal do sistema">
+            
+            <div id="pedidos-container" class="main-tab-content active" role="tabpanel" aria-labelledby="pedidos-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação de Pedidos">
+                    <button class="nav-button sub-tab-button active" data-target="cadastrar-pedido" aria-controls="cadastrar-pedido" aria-selected="true" role="tab">Cadastrar</button>
+                    <button class="nav-button sub-tab-button" data-target="consultar-pedidos" aria-controls="consultar-pedidos" aria-selected="false" role="tab">Consulta</button>
+                    <button class="nav-button sub-tab-button" data-target="gerar-relatorio" aria-controls="gerar-relatorio" aria-selected="false" role="tab">Relatório</button>
+                    <button class="nav-button sub-tab-button" data-target="cadastrar-campos-section" aria-controls="cadastrar-campos-section" aria-selected="false" role="tab">Campos <span class="alert-icon" aria-label="Alerta">!</span></button>
+                </aside>
+                <div class="sub-content">
+                    
+                    <section id="cadastrar-pedido" class="tab-content active" role="tabpanel" aria-labelledby="cadastrar-pedido-tab">
+                        <h2 id="cadastrar-pedido-title">Cadastrar Novo Pedido</h2>
+                        <form id="form-pedido">
+                            <div class="form-group">
+                                <label for="data-pedido">Data do Pedido:</label>
+                                <input type="date" id="data-pedido" name="data-pedido" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loja">Loja:</label>
+                                <select id="loja" name="loja" required>
+                                    <option value="">Selecione a Loja</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="nome-produto">Nome do Produto:</label>
+                                <input type="text" id="nome-produto" name="nome-produto" list="produtos-list" required>
+                                <datalist id="produtos-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca-produto">Marca do Produto:</label>
+                                <input type="text" id="marca-produto" name="marca-produto" list="marcas-list" required>
+                                <datalist id="marcas-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="fornecedor">Fornecedor:</label>
+                                <input type="text" id="fornecedor" name="fornecedor" list="fornecedores-list" required>
+                                <datalist id="fornecedores-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-unidade">Valor da Unidade:</label>
+                                <input type="text" id="valor-unidade" name="valor-unidade" placeholder="R$ 0,00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="medida-unidade">Medida da Unidade:</label>
+                                <select id="medida-unidade" name="medida-unidade" required>
+                                    <option value="">Selecione a Medida</option>
+                                    <option value="Kg">Kg</option>
+                                    <option value="L">L</option>
+                                    <option value="Fardo">Fardo</option>
+                                    <option value="Caixa">Caixa</option>
+                                    <option value="Bisnaga">Bisnaga</option>
+                                    <option value="Lata">Lata</option>
+                                    <option value="Unidade">Unidade</option>
+                                    <option value="Manta">Manta</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-pedida">Quantidade Pedida:</label>
+                                <input type="text" id="quantidade-pedida" name="quantidade-pedida" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-total">Valor Total:</label>
+                                <input type="text" id="valor-total" name="valor-total" placeholder="R$ 0,00" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-entrega">Data da Entrega:</label>
+                                <div class="input-with-button">
+                                    <input type="date" id="data-entrega" name="data-entrega">
+                                    <button type="button" id="btn-data-hoje">Hoje</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-submit">Cadastrar Pedido</button>
+                        </form>
+                    </section>
+
+                    <section id="consultar-pedidos" class="tab-content" role="tabpanel" aria-labelledby="consultar-pedidos-tab">
+                        <h2 id="consultar-pedidos-title">Consultar Pedidos</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="search-data-inicio">Data de Início:</label>
+                                <input type="date" id="search-data-inicio" class="search-input">
+                                <label for="search-data-fim">Data de Fim:</label>
+                                <input type="date" id="search-data-fim" class="search-input">
+                                <label for="search-loja">Loja:</label>
+                                <select id="search-loja" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="search-produto">Nome do Produto:</label>
+                                <input type="text" id="search-produto" class="search-input" placeholder="Nome do Produto">
+                                <label for="search-marca">Marca do Produto:</label>
+                                <input type="text" id="search-marca" class="search-input" placeholder="Marca do Produto">
+                                <label for="search-fornecedor">Fornecedor:</label>
+                                <input type="text" id="search-fornecedor" class="search-input" placeholder="Fornecedor">
+                            </div>
+                            <button id="btn-search" class="btn-search">Pesquisar</button>
+                        </div>
+                        <div class="results-container" role="region" aria-live="polite">
+                            <p id="total-results"></p>
+                            <div class="table-container">
+                                <table id="tabela-pedidos">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <th><input type="checkbox" id="select-all-checkbox" aria-label="Selecionar todos os pedidos"></th>
+                                            <th class="col-data">Data</th>
+                                            <th>Loja</th>
+                                            <th>Produto</th>
+                                            <th>Marca</th>
+                                            <th>Fornecedor</th>
+                                            <th>Valor Unidade</th>
+                                            <th>Medida</th>
+                                            <th>Qtd Pedida</th>
+                                            <th>Valor Total</th>
+                                            <th class="col-data">Entrega</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="summary-block">
+                            <h4>Totais dos Itens Selecionados</h4>
+                            <p>Valor Unidade Total: <span id="total-valor-unidade">0</span></p>
+                            <p>Quantidade Pedida Total: <span id="total-quantidade-pedida">0</span></p>
+                            <p>Valor Total: <span id="total-valor-total">0</span></p>
+                        </div>
+                    </section>
+
+                    <section id="gerar-relatorio" class="tab-content" role="tabpanel" aria-labelledby="gerar-relatorio-tab">
+                        <h2 id="gerar-relatorio-title">Gerar Relatório</h2>
+                        <div class="report-options">
+                            <label for="report-type">Tipo de Relatório:</label>
+                            <select id="report-type">
+                                <option value="mensal-geral">Mensal de Pedidos</option>
+                                <option value="por-produto">Por Nome do Produto</option>
+                                <option value="por-marca">Por Marca do Produto</option>
+                                <option value="por-fornecedor">Por Fornecedor</option>
+                            </select>
+                        </div>
+                        <div class="search-container report-search-container">
+                            <div class="search-fields">
+                                <label for="report-search-produto">Nome do Produto:</label>
+                                <input type="text" id="report-search-produto" class="search-input" placeholder="Nome do Produto">
+                                <label for="report-search-marca">Marca do Produto:</label>
+                                <input type="text" id="report-search-marca" class="search-input" placeholder="Marca do Produto">
+                                <label for="report-search-fornecedor">Fornecedor:</label>
+                                <input type="text" id="report-search-fornecedor" class="search-input" placeholder="Fornecedor">
+                            </div>
+                        </div>
+                        <button id="btn-generate-report" class="btn-generate">Gerar Relatório</button>
+                        <div id="report-results" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel" style="display: none;">Exportar para Excel</button>
+                    </section>
+                    
+                    <section id="cadastrar-campos-section" class="tab-content" role="tabpanel" aria-labelledby="cadastrar-campos-tab">
+                        <h2 id="cadastrar-campos-title">Cadastrar Campos</h2>
+                        <div class="campos-container">
+                            <div class="campos-group">
+                                <h3>Produtos</h3>
+                                <form id="form-produto-add">
+                                    <label for="input-produto-add" class="sr-only">Adicionar novo produto:</label>
+                                    <input type="text" id="input-produto-add" placeholder="Novo produto" required>
+                                    <button type="submit" class="btn-add">Adicionar</button>
+                                </form>
+                                <ul id="lista-produtos-campos" aria-label="Lista de produtos cadastrados"></ul>
+                            </div>
+                            <div class="campos-group">
+                                <h3>Marcas</h3>
+                                <form id="form-marca-add">
+                                    <label for="input-marca-add" class="sr-only">Adicionar nova marca:</label>
+                                    <input type="text" id="input-marca-add" placeholder="Nova marca" required>
+                                    <button type="submit" class="btn-add">Adicionar</button>
+                                </form>
+                                <ul id="lista-marcas-campos" aria-label="Lista de marcas cadastradas"></ul>
+                            </div>
+                            <div class="campos-group">
+                                <h3>Fornecedores</h3>
+                                <form id="form-fornecedor-add">
+                                    <label for="input-fornecedor-add" class="sr-only">Adicionar novo fornecedor:</label>
+                                    <input type="text" id="input-fornecedor-add" placeholder="Novo fornecedor" required>
+                                    <button type="submit" class="btn-add">Adicionar</button>
+                                </form>
+                                <ul id="lista-fornecedores-campos" aria-label="Lista de fornecedores cadastrados"></ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="controle-043-container" class="main-tab-content" role="tabpanel" aria-labelledby="controle-043-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação do Controle 043">
+                    <button class="nav-button sub-tab-button active" data-target="inclusao-043" aria-controls="inclusao-043" aria-selected="true" role="tab">Inclusão</button>
+                    <button class="nav-button sub-tab-button" data-target="consulta-043" aria-controls="consulta-043" aria-selected="false" role="tab">Consulta</button>
+                    <button class="nav-button sub-tab-button" data-target="relatorio-043" aria-controls="relatorio-043" aria-selected="false" role="tab">Relatório</button>
+                </aside>
+                <div class="sub-content">
+                    
+                    <section id="inclusao-043" class="tab-content active" role="tabpanel" aria-labelledby="inclusao-043-tab">
+                        <h2 id="inclusao-043-title">Inclusão de Crédito e Débito</h2>
+                        <form id="form-043">
+                            <div class="form-group">
+                                <label for="data-043">Data:</label>
+                                <input type="date" id="data-043" name="data-043" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loja-043">Selecionar Loja:</label>
+                                <select id="loja-043" name="loja-043" required>
+                                    <option value="">Selecione a Loja</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo-lancamento">Tipo de Lançamento:</label>
+                                <select id="tipo-lancamento" name="tipo-lancamento" required>
+                                    <option value="Debito">Débito</option>
+                                    <option value="Credito">Crédito</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-043">Valor:</label>
+                                <input type="text" id="valor-043" name="valor-043" placeholder="0,00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="descricao-043">Descrição (opcional):</label>
+                                <textarea id="descricao-043" name="descricao-043" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">Incluir</button>
+                        </form>
+                    </section>
+                    
+                    <section id="consulta-043" class="tab-content" role="tabpanel" aria-labelledby="consulta-043-tab">
+                        <h2 id="consulta-043-title">Consulta de Lançamentos</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="filtro-consulta-043">Filtrar por:</label>
+                                <select id="filtro-consulta-043" class="search-input">
+                                    <option value="detalhado">Detalhado</option>
+                                    <option value="sintetico">Sintético</option>
+                                </select>
+                                <label for="search-loja-043">Loja:</label>
+                                <select id="search-loja-043" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="search-data-043">Data:</label>
+                                <input type="date" id="search-data-043" class="search-input" placeholder="Data">
+                                <label for="search-mes-043">Mês:</label>
+                                <select id="search-mes-043" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <label for="search-ano-043">Ano:</label>
+                                <select id="search-ano-043" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="search-tipo-043">Tipo:</label>
+                                <select id="search-tipo-043" class="search-input">
+                                    <option value="">Crédito e Débito</option>
+                                    <option value="Credito">Crédito</option>
+                                    <option value="Debito">Débito</option>
+                                </select>
+                            </div>
+                            <button id="btn-search-043" class="btn-search">Consultar</button>
+                        </div>
+                        <div id="results-043" role="region" aria-live="polite"></div>
+                    </section>
+
+                    <section id="relatorio-043" class="tab-content" role="tabpanel" aria-labelledby="relatorio-043-tab">
+                        <h2 id="relatorio-043-title">Relatório de Lançamentos</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="relatorio-tipo-043">Tipo de Relatório:</label>
+                                <select id="relatorio-tipo-043" class="search-input">
+                                    <option value="detalhado-completo">Detalhado</option>
+                                    <option value="soma-total">Soma Total (Créditos - Débitos)</option>
+                                </select>
+                                <label for="report-search-loja-043">Loja:</label>
+                                <select id="report-search-loja-043" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="report-search-data-043">Data:</label>
+                                <input type="date" id="report-search-data-043" class="search-input" placeholder="Data">
+                                <label for="report-search-mes-043">Mês:</label>
+                                <select id="report-search-mes-043" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <label for="report-search-ano-043">Ano:</label>
+                                <select id="report-search-ano-043" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="report-search-tipo-043">Tipo:</label>
+                                <select id="report-search-tipo-043" class="search-input">
+                                    <option value="">Crédito e Débito</option>
+                                    <option value="Credito">Crédito</option>
+                                    <option value="Debito">Débito</option>
+                                </select>
+                            </div>
+                            <button id="btn-generate-report-043" class="btn-generate">Gerar Relatório</button>
+                        </div>
+                        <div id="report-results-043" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel-043" style="display: none;">Exportar para Excel</button>
+                    </section>
+                </div>
+            </div>
+
+            <div id="financeiro-container" class="main-tab-content" role="tabpanel" aria-labelledby="financeiro-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação Financeira">
+                    <button class="nav-button sub-tab-button active" data-target="lancamento-mensal" aria-controls="lancamento-mensal" aria-selected="true" role="tab">Lançamento</button>
+                    <button class="nav-button sub-tab-button" data-target="consulta-mensal" aria-controls="consulta-mensal" aria-selected="false" role="tab">Consulta</button>
+                    <button class="nav-button sub-tab-button" data-target="relatorio-mensal" aria-controls="relatorio-mensal" aria-selected="false" role="tab">Relatório</button>
+                </aside>
+                <div class="sub-content">
+                    <section id="lancamento-mensal" class="tab-content active" role="tabpanel" aria-labelledby="lancamento-mensal-tab">
+                        <h2 id="lancamento-mensal-title">Lançamento Mensal</h2>
+                        <form id="form-lancamento-mensal">
+                            <div class="form-group">
+                                <label for="loja-mensal">Loja:</label>
+                                <select id="loja-mensal" name="loja-mensal" required>
+                                    <option value="">Selecione a Loja</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ano-mensal">Ano:</label>
+                                <select id="ano-mensal" name="ano-mensal" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mes-mensal">Mês:</label>
+                                <select id="mes-mensal" name="mes-mensal" required>
+                                    <option value="">Selecione o Mês</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="caixa-economica">Caixa Econômica:</label>
+                                <input type="text" id="caixa-economica" name="caixa-economica" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cofre">Cofre:</label>
+                                <input type="text" id="cofre" name="cofre" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loteria">Loteria:</label>
+                                <input type="text" id="loteria" name="loteria" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pagbankh">PagBank H:</label>
+                                <input type="text" id="pagbankh" name="pagbankh" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pagbankd">PagBank D:</label>
+                                <input type="text" id="pagbankd" name="pagbankd" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="investimento">Investimento:</label>
+                                <input type="text" id="investimento" name="investimento" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lucro-mes">Lucro Mês:</label>
+                                <input type="text" id="lucro-mes" name="lucro-mes" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="total-mensal">Total:</label>
+                                <input type="text" id="total-mensal" name="total-mensal" readonly>
+                            </div>
+                            <button type="submit" class="btn-submit">Lançar Mês</button>
+                        </form>
+                    </section>
+                    
+                    <section id="relatorio-mensal" class="tab-content" role="tabpanel" aria-labelledby="relatorio-mensal-tab">
+                        <h2 id="relatorio-mensal-title">Relatório Mensal</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="rel-loja-mensal">Loja:</label>
+                                <select id="rel-loja-mensal" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="rel-ano-mensal">Ano:</label>
+                                <select id="rel-ano-mensal" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="rel-mes-mensal">Mês:</label>
+                                <select id="rel-mes-mensal" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <button id="btn-generate-relatorio-mensal" class="btn-generate">Gerar Relatório</button>
+                        </div>
+                        <div id="relatorio-mensal-resultados" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel-mensal" style="display: none;">Exportar para Excel</button>
+                    </section>
+                    
+                    <section id="consulta-mensal" class="tab-content" role="tabpanel" aria-labelledby="consulta-mensal-tab">
+                        <h2 id="consulta-mensal-title">Consulta de Lançamentos Mensais</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="cons-loja-mensal">Loja:</label>
+                                <select id="cons-loja-mensal" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="cons-ano-mensal">Ano:</label>
+                                <select id="cons-ano-mensal" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="cons-mes-mensal">Mês:</label>
+                                <select id="cons-mes-mensal" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <button id="btn-search-mensal" class="btn-search">Consultar</button>
+                        </div>
+                        <div id="consulta-mensal-resultados" role="region" aria-live="polite"></div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="backup-container" class="main-tab-content" role="tabpanel" aria-labelledby="backup-container-tab">
+                <div class="sub-content backup-content">
+                    <section id="backup-restore-section" class="tab-content active" role="tabpanel" aria-labelledby="backup-restore-title">
+                        <h2 id="backup-restore-title">Backup e Restauração de Dados</h2>
+                        <div class="backup-options-container">
+                            <div class="backup-option">
+                                <h3>Exportar Dados (Backup)</h3>
+                                <p>Crie uma cópia de segurança de todos os dados do sistema em um arquivo JSON.</p>
+                                <button id="btn-export-backup" class="btn-submit">Fazer Backup dos Dados</button>
+                            </div>
+                            <div class="backup-option">
+                                <h3>Importar Dados (Restauração)</h3>
+                                <p>Carregue um arquivo JSON de backup para restaurar os dados do sistema. **Atenção: Isso substituirá os dados atuais.**</p>
+                                <input type="file" id="import-file-input" accept=".json" style="display:none;">
+                                <button id="btn-import-backup" class="btn-submit">Importar Dados</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registrado com sucesso:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Registro do ServiceWorker falhou:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

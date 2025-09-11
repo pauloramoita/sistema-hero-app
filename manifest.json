@@ -1,0 +1,21 @@
+{
+  "name": "Sistema Hero",
+  "short_name": "Hero",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#D32F2F",
+  "theme_color": "#212121",
+  "description": "Seu aplicativo para controle de pedidos e finanças.",
+  "icons": [
+    {
+      "src": "hero-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "hero-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
