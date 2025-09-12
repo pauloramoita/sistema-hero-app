@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         tabelaPedidosBody: null,
         tabelaPedidos: null,
         resultsContainer: document.querySelector('#consultar-pedidos .results-container'),
+        btnShowNaoEntregues: document.getElementById('btn-show-nao-entregues'),
+        
+        // Referências adicionadas para o novo comportamento
+        nomeProdutoInput: document.getElementById('nome-produto'),
 
         // Controle 043
         form043: document.getElementById('form-043'),
@@ -188,20 +192,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Lógica de Abas (Unificada)
     const tabManager = {
+        showMainMenu: () => {
+            dom.mainSidebar.style.display = 'flex';
+            document.querySelectorAll('.sub-sidebar').forEach(sub => sub.style.display = 'none');
+            dom.mainTabContents.forEach(tab => tab.classList.remove('active'));
+            dom.headerApp.style.cursor = 'default';
+            if (dom.mainTabButtons.length > 0) {
+                dom.mainTabButtons[0].classList.add('active');
+            }
+        },
         switchMainTab: (targetId) => {
-            dom.mainTabContents.forEach(tab => {
-                tab.classList.remove('active');
-            });
-            dom.mainTabButtons.forEach(button => {
-                button.classList.remove('active');
-            });
+            dom.mainSidebar.style.display = 'none';
+            document.querySelectorAll('.sub-sidebar').forEach(sub => sub.style.display = 'none');
 
             const targetTab = document.getElementById(targetId);
             if (targetTab) {
+                dom.mainTabContents.forEach(tab => tab.classList.remove('active'));
                 targetTab.classList.add('active');
-                document.querySelector(`.main-tab-button[data-target="${targetId}"]`).classList.add('active');
+                
+                const subSidebar = targetTab.querySelector('.sub-sidebar');
+                if (subSidebar) {
+                    subSidebar.style.display = 'flex';
+                }
             }
             tabManager.handleSubTab(targetId);
+            dom.headerApp.style.cursor = 'pointer';
         },
         switchSubTab: (targetId, parentId) => {
             const parentTabContent = document.getElementById(parentId);
@@ -347,14 +362,31 @@ document.addEventListener('DOMContentLoaded', () => {
             pedidosModule.updateDatalists();
             tabManager.switchSubTab('cadastrar-pedido', 'pedidos-container');
         },
+        autoPreencherPedido: () => {
+            const nomeProdutoSelecionado = dom.nomeProdutoInput.value.toLowerCase();
+            const pedidosFiltrados = state.pedidos.filter(p => p.nomeProduto.toLowerCase() === nomeProdutoSelecionado);
+            
+            if (pedidosFiltrados.length > 0) {
+                const ultimoPedido = pedidosFiltrados.reduce((ultimo, atual) => {
+                    return new Date(atual.dataPedido) > new Date(ultimo.dataPedido) ? atual : ultimo;
+                });
+                
+                document.getElementById('marca-produto').value = ultimoPedido.marcaProduto;
+                document.getElementById('fornecedor').value = ultimoPedido.fornecedor;
+                dom.valorUnidadeInput.value = utils.formatCurrency(ultimoPedido.valorUnidade);
+                document.getElementById('medida-unidade').value = ultimoPedido.medidaUnidade;
+                dom.quantidadePedidaInput.value = ultimoPedido.quantidadePedida.toFixed(2).replace('.', ',');
+
+                pedidosModule.calcularValorTotal();
+            }
+        },
         initializeSearch: () => {
-            const today = new Date();
-            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-            dom.searchDataInicio.value = firstDayOfMonth.toISOString().split('T')[0];
-            dom.searchDataFim.value = today.toISOString().split('T')[0];
+            const today = new Date().toISOString().split('T')[0];
+            dom.searchDataInicio.value = today;
+            dom.searchDataFim.value = today;
             pedidosModule.searchPedidos();
         },
-        searchPedidos: () => {
+        searchPedidos: (filtroNaoEntregues = false) => {
             const dataInicio = dom.searchDataInicio.value ? new Date(dom.searchDataInicio.value + 'T00:00:00') : null;
             const dataFim = dom.searchDataFim.value ? new Date(dom.searchDataFim.value + 'T23:59:59') : null;
             const searchLojaValue = dom.searchLoja.value;
@@ -364,14 +396,14 @@ document.addEventListener('DOMContentLoaded', () => {
         
             const resultados = state.pedidos.filter(p => {
                 const pedidoDate = new Date(p.dataPedido + 'T00:00:00');
-                return (
-                    (!dataInicio || pedidoDate >= dataInicio) &&
-                    (!dataFim || pedidoDate <= dataFim) &&
-                    (!searchLojaValue || p.loja === searchLojaValue) &&
-                    p.nomeProduto.toLowerCase().includes(searchProduto) &&
-                    p.marcaProduto.toLowerCase().includes(searchMarca) &&
-                    p.fornecedor.toLowerCase().includes(searchFornecedor)
-                );
+                const matchDate = (!dataInicio || pedidoDate >= dataInicio) && (!dataFim || pedidoDate <= dataFim);
+                const matchLoja = !searchLojaValue || p.loja === searchLojaValue;
+                const matchProduto = p.nomeProduto.toLowerCase().includes(searchProduto);
+                const matchMarca = p.marcaProduto.toLowerCase().includes(searchMarca);
+                const matchFornecedor = p.fornecedor.toLowerCase().includes(searchFornecedor);
+                const matchNaoEntregues = !filtroNaoEntregues || !p.dataEntrega;
+            
+                return matchDate && matchLoja && matchProduto && matchMarca && matchFornecedor && matchNaoEntregues;
             }).sort((a, b) => new Date(b.dataPedido) - new Date(a.dataPedido));
         
             pedidosModule.renderPedidos(resultados);
@@ -722,7 +754,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td class="valor-saldo">${utils.formatCurrency(day.totalDia)}</td>
                 </tr>
             `).join('');
-            
             dom.results043Div.innerHTML = `
                 <div class="table-container">
                     <table class="tabela-sintetico">
@@ -736,7 +767,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>Totais de Lançamentos</h4>
                     <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(grandTotalCredito)}</span></p>
                     <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(grandTotalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldoGeral)}</span></p>
+                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
                 </div>
             `;
         },
@@ -861,7 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4>Totais de Lançamentos</h4>
                     <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(grandTotalCredito)}</span></p>
                     <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(grandTotalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldoGeral)}</span></p>
+                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
                 </div>
             `;
         },
@@ -1276,8 +1307,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupEventListeners = () => {
         dom.mainTabButtons.forEach(button => button.addEventListener('click', () => tabManager.switchMainTab(button.dataset.target)));
         dom.subTabButtons.forEach(button => button.addEventListener('click', () => tabManager.switchSubTab(button.dataset.target, button.closest('.main-tab-content').id)));
-        dom.headerApp.addEventListener('click', () => tabManager.switchMainTab('pedidos-container'));
+        dom.headerApp.addEventListener('click', () => tabManager.showMainMenu());
         dom.formPedido.addEventListener('submit', pedidosModule.submitForm);
+        dom.nomeProdutoInput.addEventListener('change', pedidosModule.autoPreencherPedido);
         dom.form043.addEventListener('submit', controle043Module.submitForm);
         dom.formLancamentoMensal.addEventListener('submit', financeiroModule.submitForm);
         dom.btnDataHoje.addEventListener('click', () => dom.dataEntregaInput.value = new Date().toISOString().split('T')[0]);
@@ -1285,11 +1317,12 @@ document.addEventListener('DOMContentLoaded', () => {
         dom.quantidadePedidaInput.addEventListener('input', pedidosModule.handleInputMask);
         dom.valor043Input.addEventListener('input', pedidosModule.handleInputMask);
         document.querySelectorAll('.mensal-value-input').forEach(input => input.addEventListener('input', pedidosModule.handleInputMask));
-        dom.btnSearch.addEventListener('click', pedidosModule.searchPedidos);
+        dom.btnSearch.addEventListener('click', () => pedidosModule.searchPedidos());
         dom.resultsContainer.addEventListener('click', pedidosModule.handleTableClick);
         dom.resultsContainer.addEventListener('change', pedidosModule.handleCheckboxChange);
         dom.btnGenerateReport.addEventListener('click', pedidosModule.generateReport);
         dom.btnExportExcel.addEventListener('click', pedidosModule.exportExcel);
+        dom.btnShowNaoEntregues.addEventListener('click', () => pedidosModule.searchPedidos(true));
         dom.btnSearch043.addEventListener('click', controle043Module.searchLancamentos);
         dom.results043Div.addEventListener('click', controle043Module.handleResultsClick);
         dom.btnGenerateReport043.addEventListener('click', controle043Module.generateReport);
@@ -1318,7 +1351,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 7. Inicialização
     const init = () => {
         setupEventListeners();
-        tabManager.switchMainTab('pedidos-container');
+        tabManager.showMainMenu();
         pedidosModule.updateDatalists();
     };
     init();
