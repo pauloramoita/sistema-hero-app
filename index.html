@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Hero</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
@@ -24,7 +23,7 @@
 
         <main class="content" aria-label="Conteúdo principal do sistema">
             
-            <div id="pedidos-container" class="main-tab-content active" role="tabpanel" aria-labelledby="pedidos-container-tab">
+            <div id="pedidos-container" class="main-tab-content" role="tabpanel" aria-labelledby="pedidos-container-tab">
                 <aside class="sub-sidebar" aria-label="Navegação de Pedidos">
                     <button class="nav-button sub-tab-button active" data-target="cadastrar-pedido" aria-controls="cadastrar-pedido" aria-selected="true" role="tab">Cadastrar</button>
                     <button class="nav-button sub-tab-button" data-target="consultar-pedidos" aria-controls="consultar-pedidos" aria-selected="false" role="tab">Consulta</button>
@@ -123,7 +122,10 @@
                                 <label for="search-fornecedor">Fornecedor:</label>
                                 <input type="text" id="search-fornecedor" class="search-input" placeholder="Fornecedor">
                             </div>
-                            <button id="btn-search" class="btn-search">Pesquisar</button>
+                            <div class="search-buttons-group">
+                                <button id="btn-search" class="btn-search">Pesquisar</button>
+                                <button id="btn-show-nao-entregues" class="btn-action">Pedidos Não Entregues</button>
+                            </div>
                         </div>
                         <div class="results-container" role="region" aria-live="polite">
                             <p id="total-results"></p>
@@ -545,18 +547,5 @@
 
     <script src="script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registrado com sucesso:', registration);
-                    })
-                    .catch(error => {
-                        console.log('Registro do ServiceWorker falhou:', error);
-                    });
-            });
-        }
-    </script>
 </body>
 </html>
