@@ -1,1359 +1,551 @@
-document.addEventListener('DOMContentLoaded', () => {
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Hero</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    // 1. Referências ao DOM (Centralizadas e Otimizadas)
-    const dom = {
-        // Abas Principais
-        mainSidebar: document.querySelector('.main-sidebar'),
-        mainTabButtons: document.querySelectorAll('.main-tab-button'),
-        mainTabContents: document.querySelectorAll('.main-tab-content'),
-        headerApp: document.getElementById('header-app'),
+    <header class="header-container" id="header-app">
+        <img src="hero-logo.png" alt="Logo do Sistema Hero" class="hero-logo">
+        <h1 class="hero-title">Sistema Hero</h1>
+    </header>
 
-        // Sub-abas
-        subTabButtons: document.querySelectorAll('.sub-tab-button'),
-        subTabContents: document.querySelectorAll('.tab-content'),
+    <div class="app-container">
+        <aside class="sidebar main-sidebar active" aria-label="Navegação principal">
+            <button class="nav-button main-tab-button active" data-target="pedidos-container" aria-label="Acessar Pedidos">Pedidos</button>
+            <button class="nav-button main-tab-button" data-target="controle-043-container" aria-label="Acessar Controle 043">Controle 043</button>
+            <button class="nav-button main-tab-button" data-target="financeiro-container" aria-label="Acessar Financeiro">Financeiro</button>
+            <button class="nav-button main-tab-button" data-target="backup-container" aria-label="Acessar Backup e Restauração">Backup</button>
+        </aside>
 
-        // Pedidos
-        formPedido: document.getElementById('form-pedido'),
-        dataPedidoInput: document.getElementById('data-pedido'),
-        lojaSelect: document.getElementById('loja'),
-        valorUnidadeInput: document.getElementById('valor-unidade'),
-        quantidadePedidaInput: document.getElementById('quantidade-pedida'),
-        valorTotalInput: document.getElementById('valor-total'),
-        btnDataHoje: document.getElementById('btn-data-hoje'),
-        dataEntregaInput: document.getElementById('data-entrega'),
-        btnSearch: document.getElementById('btn-search'),
-        searchDataInicio: document.getElementById('search-data-inicio'),
-        searchDataFim: document.getElementById('search-data-fim'),
-        searchLoja: document.getElementById('search-loja'),
-        searchProduto: document.getElementById('search-produto'),
-        searchMarca: document.getElementById('search-marca'),
-        searchFornecedor: document.getElementById('search-fornecedor'),
-        totalResultsP: null,
-        reportResultsDiv: document.getElementById('report-results'),
-        btnGenerateReport: document.getElementById('btn-generate-report'),
-        reportTypeSelect: document.getElementById('report-type'),
-        btnExportExcel: document.getElementById('btn-export-excel'),
-        sumResultsDiv: null,
-        totalValorUnidadeSpan: null,
-        totalQuantidadePedidaSpan: null,
-        totalValorTotalSpan: null,
-        selectAllCheckbox: null,
-        reportSearchProduto: document.getElementById('report-search-produto'),
-        reportSearchMarca: document.getElementById('report-search-marca'),
-        reportSearchFornecedor: document.getElementById('report-search-fornecedor'),
-        produtosDatalist: document.getElementById('produtos-list'),
-        marcasDatalist: document.getElementById('marcas-list'),
-        fornecedoresDatalist: document.getElementById('fornecedores-list'),
-        formProdutoAdd: document.getElementById('form-produto-add'),
-        formMarcaAdd: document.getElementById('form-marca-add'),
-        formFornecedorAdd: document.getElementById('form-fornecedor-add'),
-        listaProdutosCampos: document.getElementById('lista-produtos-campos'),
-        listaMarcasCampos: document.getElementById('lista-marcas-campos'),
-        listaFornecedoresCampos: document.getElementById('lista-fornecedores-campos'),
-        tabelaPedidosBody: null,
-        tabelaPedidos: null,
-        resultsContainer: document.querySelector('#consultar-pedidos .results-container'),
-        btnShowNaoEntregues: document.getElementById('btn-show-nao-entregues'),
-        
-        // Referências adicionadas para o novo comportamento
-        nomeProdutoInput: document.getElementById('nome-produto'),
-
-        // Controle 043
-        form043: document.getElementById('form-043'),
-        data043Input: document.getElementById('data-043'),
-        loja043Select: document.getElementById('loja-043'),
-        tipoLancamentoSelect: document.getElementById('tipo-lancamento'),
-        valor043Input: document.getElementById('valor-043'),
-        descricao043Textarea: document.getElementById('descricao-043'),
-        filtroConsulta043: document.getElementById('filtro-consulta-043'),
-        searchData043: document.getElementById('search-data-043'),
-        searchMes043: document.getElementById('search-mes-043'),
-        searchAno043: document.getElementById('search-ano-043'),
-        searchTipo043: document.getElementById('search-tipo-043'),
-        searchLoja043: document.getElementById('search-loja-043'),
-        btnSearch043: document.getElementById('btn-search-043'),
-        results043Div: document.getElementById('results-043'),
-        relatorioTipo043: document.getElementById('relatorio-tipo-043'),
-        btnGenerateReport043: document.getElementById('btn-generate-report-043'),
-        reportResults043Div: document.getElementById('report-results-043'),
-        btnExportExcel043: document.getElementById('btn-export-excel-043'),
-        reportSearchLoja043: document.getElementById('report-search-loja-043'),
-        reportSearchData043: document.getElementById('report-search-data-043'),
-        reportSearchMes043: document.getElementById('report-search-mes-043'),
-        reportSearchAno043: document.getElementById('report-search-ano-043'),
-        reportSearchTipo043: document.getElementById('report-search-tipo-043'),
-        
-        // Financeiro
-        formLancamentoMensal: document.getElementById('form-lancamento-mensal'),
-        lojaMensalSelect: document.getElementById('loja-mensal'),
-        anoMensalSelect: document.getElementById('ano-mensal'),
-        mesMensalSelect: document.getElementById('mes-mensal'),
-        caixaEconomicaInput: document.getElementById('caixa-economica'),
-        cofreInput: document.getElementById('cofre'),
-        loteriaInput: document.getElementById('loteria'),
-        pagbankhInput: document.getElementById('pagbankh'),
-        pagbankdInput: document.getElementById('pagbankd'),
-        investimentoInput: document.getElementById('investimento'),
-        lucroMesInput: document.getElementById('lucro-mes'),
-        totalMensalInput: document.getElementById('total-mensal'),
-        relLojaMensalSelect: document.getElementById('rel-loja-mensal'),
-        relAnoMensalSelect: document.getElementById('rel-ano-mensal'),
-        relMesMensalSelect: document.getElementById('rel-mes-mensal'),
-        btnGenerateRelatorioMensal: document.getElementById('btn-generate-relatorio-mensal'),
-        relatorioMensalResultadosDiv: document.getElementById('relatorio-mensal-resultados'),
-        btnExportExcelMensal: document.getElementById('btn-export-excel-mensal'),
-        consLojaMensalSelect: document.getElementById('cons-loja-mensal'),
-        consAnoMensalSelect: document.getElementById('cons-ano-mensal'),
-        consMesMensalSelect: document.getElementById('cons-mes-mensal'),
-        btnSearchMensal: document.getElementById('btn-search-mensal'),
-        consultaMensalResultadosDiv: document.getElementById('consulta-mensal-resultados'),
-
-        // Backup
-        btnExportBackup: document.getElementById('btn-export-backup'),
-        btnImportBackup: document.getElementById('btn-import-backup'),
-        importFileInput: document.getElementById('import-file-input')
-    };
-    
-    // 2. Estado do Aplicativo
-    let state = {
-        pedidos: JSON.parse(localStorage.getItem('pedidos')) || [],
-        produtos: JSON.parse(localStorage.getItem('produtos')) || [],
-        marcas: JSON.parse(localStorage.getItem('marcas')) || [],
-        fornecedores: JSON.parse(localStorage.getItem('fornecedores')) || [],
-        lancamentos: JSON.parse(localStorage.getItem('lancamentos')) || [],
-        lancamentosMensais: JSON.parse(localStorage.getItem('lancamentosMensais')) || [],
-        selectedPedidos: [],
-    };
-
-    // 3. Funções de Utilidade (Refatoradas para maior clareza)
-    const utils = {
-        formatCurrency: (value) => {
-            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-        },
-        parseCurrency: (text) => {
-            if (!text) return 0;
-            return parseFloat(text.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-        },
-        parseMensalValue: (text) => {
-            if (!text) return 0;
-            const isNegative = text.startsWith('-');
-            const value = parseFloat(text.replace(/[R$\s-.]/g, '').replace(',', '.')) || 0;
-            return isNegative ? -value : value;
-        },
-        displayMessage: (message) => {
-            alert(message);
-        },
-        formatDateToBR: (dateString) => {
-            if (!dateString) return '';
-            const [year, month, day] = dateString.split('-');
-            return `${day}/${month}/${year}`;
-        },
-        getMonthName: (monthNumber) => {
-            const date = new Date();
-            date.setMonth(monthNumber - 1);
-            return date.toLocaleString('pt-BR', { month: 'long' });
-        },
-        groupAndSumByDate: (lista) => {
-            const dailySummary = lista.reduce((acc, item) => {
-                const date = item.data;
-                if (!acc[date]) {
-                    acc[date] = { credito: 0, debito: 0 };
-                }
-                if (item.tipo === 'Credito') {
-                    acc[date].credito += item.valor;
-                } else {
-                    acc[date].debito += item.valor;
-                }
-                return acc;
-            }, {});
-
-            const sortedDates = Object.keys(dailySummary).sort((a, b) => new Date(a) - new Date(b));
+        <main class="content" aria-label="Conteúdo principal do sistema">
             
-            const summaryArray = sortedDates.map(date => ({
-                data: date,
-                credito: dailySummary[date].credito,
-                debito: dailySummary[date].debito,
-                totalDia: dailySummary[date].credito - dailySummary[date].debito
-            }));
-            
-            const grandTotalCredito = summaryArray.reduce((sum, item) => sum + item.credito, 0);
-            const grandTotalDebito = summaryArray.reduce((sum, item) => sum + item.debito, 0);
-    
-            return { summary: summaryArray, grandTotalCredito, grandTotalDebito };
-        },
-        saveData: () => {
-            for (const key in state) {
-                if (Object.hasOwnProperty.call(state, key)) {
-                    localStorage.setItem(key, JSON.stringify(state[key]));
-                }
-            }
-        }
-    };
-
-    // 4. Lógica de Abas (Unificada)
-    const tabManager = {
-        showMainMenu: () => {
-            dom.mainSidebar.style.display = 'flex';
-            document.querySelectorAll('.sub-sidebar').forEach(sub => sub.style.display = 'none');
-            dom.mainTabContents.forEach(tab => tab.classList.remove('active'));
-            dom.headerApp.style.cursor = 'default';
-            if (dom.mainTabButtons.length > 0) {
-                dom.mainTabButtons[0].classList.add('active');
-            }
-        },
-        switchMainTab: (targetId) => {
-            dom.mainSidebar.style.display = 'none';
-            document.querySelectorAll('.sub-sidebar').forEach(sub => sub.style.display = 'none');
-
-            const targetTab = document.getElementById(targetId);
-            if (targetTab) {
-                dom.mainTabContents.forEach(tab => tab.classList.remove('active'));
-                targetTab.classList.add('active');
-                
-                const subSidebar = targetTab.querySelector('.sub-sidebar');
-                if (subSidebar) {
-                    subSidebar.style.display = 'flex';
-                }
-            }
-            tabManager.handleSubTab(targetId);
-            dom.headerApp.style.cursor = 'pointer';
-        },
-        switchSubTab: (targetId, parentId) => {
-            const parentTabContent = document.getElementById(parentId);
-            const subTabs = parentTabContent.querySelectorAll('.tab-content');
-            const subButtons = parentTabContent.querySelectorAll('.sub-tab-button');
-
-            subTabs.forEach(tab => tab.classList.remove('active'));
-            subButtons.forEach(button => button.classList.remove('active'));
-
-            const targetTab = document.getElementById(targetId);
-            if (targetTab) {
-                targetTab.classList.add('active');
-                document.querySelector(`#${parentId} .sub-tab-button[data-target="${targetId}"]`).classList.add('active');
-            }
-            tabManager.handleSubTab(targetId);
-        },
-        handleSubTab: (tabId) => {
-            switch (tabId) {
-                case 'pedidos-container':
-                    tabManager.switchSubTab('cadastrar-pedido', 'pedidos-container');
-                    break;
-                case 'controle-043-container':
-                    tabManager.switchSubTab('inclusao-043', 'controle-043-container');
-                    break;
-                case 'financeiro-container':
-                    tabManager.switchSubTab('lancamento-mensal', 'financeiro-container');
-                    break;
-                case 'consultar-pedidos':
-                    pedidosModule.initializeSearch();
-                    break;
-                case 'cadastrar-campos-section':
-                    camposModule.renderCampos();
-                    break;
-                case 'cadastrar-pedido':
-                    pedidosModule.preencherCamposIniciais();
-                    pedidosModule.updateDatalists();
-                    break;
-                case 'gerar-relatorio':
-                    pedidosModule.resetReportView();
-                    break;
-                case 'inclusao-043':
-                    controle043Module.preencherCamposIniciais();
-                    break;
-                case 'consulta-043':
-                    controle043Module.preencherFiltros();
-                    controle043Module.searchLancamentos();
-                    break;
-                case 'relatorio-043':
-                    controle043Module.preencherFiltrosRelatorio();
-                    controle043Module.generateReport();
-                    break;
-                case 'lancamento-mensal':
-                    financeiroModule.preencherCampos();
-                    break;
-                case 'relatorio-mensal':
-                    financeiroModule.preencherFiltrosRelatorio();
-                    financeiroModule.generateRelatorio();
-                    break;
-                case 'consulta-mensal':
-                    financeiroModule.preencherFiltrosConsulta();
-                    financeiroModule.searchLancamentos();
-                    break;
-                case 'backup-container':
-                    break;
-            }
-        }
-    };
-
-    // 5. Módulos do Aplicativo (Reorganizado por funcionalidade)
-    const pedidosModule = {
-        preencherCamposIniciais: () => {
-            const today = new Date().toISOString().split('T')[0];
-            dom.dataPedidoInput.value = today;
-            dom.lojaSelect.value = 'Hero Joquei';
-            const lastFornecedor = state.pedidos.length > 0 ? state.pedidos[state.pedidos.length - 1].fornecedor : '';
-            document.getElementById('fornecedor').value = lastFornecedor;
-            dom.valorUnidadeInput.value = '';
-            dom.quantidadePedidaInput.value = '';
-            dom.valorTotalInput.value = 'R$ 0,00';
-            dom.formPedido.dataset.editingId = '';
-        },
-        handleInputMask: (e) => {
-            const input = e.target;
-            const isNegative = input.value.startsWith('-');
-            let value = input.value.replace(/\D/g, ''); 
-            
-            if (input === dom.valorUnidadeInput || input === dom.valor043Input || input.classList.contains('mensal-value-input')) {
-                value = value.padStart(3, '0');
-                const integerPart = value.slice(0, -2).replace(/^0+/, '');
-                const decimalPart = value.slice(-2);
-                input.value = `${isNegative ? '-' : ''}R$ ${integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${decimalPart}`;
-            } else if (input === dom.quantidadePedidaInput) {
-                value = value.padStart(3, '0');
-                const integerPart = value.slice(0, -2).replace(/^0+/, '');
-                const decimalPart = value.slice(-2);
-                input.value = `${integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')},${decimalPart}`;
-            }
-        
-            if (input === dom.valorUnidadeInput || input === dom.quantidadePedidaInput) {
-                pedidosModule.calcularValorTotal();
-            }
-            if (input.classList.contains('mensal-value-input')) {
-                financeiroModule.calcularTotais();
-            }
-        },
-        calcularValorTotal: () => {
-            const valorUnidade = utils.parseCurrency(dom.valorUnidadeInput.value);
-            const quantidade = parseFloat(dom.quantidadePedidaInput.value.replace(/\./g, '').replace(',', '.')) || 0;
-            const valorTotal = valorUnidade * quantidade;
-            dom.valorTotalInput.value = utils.formatCurrency(valorTotal);
-        },
-        submitForm: (e) => {
-            e.preventDefault();
-            const novoPedido = {
-                id: dom.formPedido.dataset.editingId ? parseInt(dom.formPedido.dataset.editingId) : Date.now(),
-                dataPedido: dom.dataPedidoInput.value,
-                loja: dom.lojaSelect.value,
-                nomeProduto: document.getElementById('nome-produto').value,
-                marcaProduto: document.getElementById('marca-produto').value,
-                fornecedor: document.getElementById('fornecedor').value,
-                valorUnidade: utils.parseCurrency(dom.valorUnidadeInput.value),
-                medidaUnidade: document.getElementById('medida-unidade').value,
-                quantidadePedida: parseFloat(dom.quantidadePedidaInput.value.replace(/\./g, '').replace(',', '.')),
-                valorTotal: utils.parseCurrency(dom.valorTotalInput.value),
-                dataEntrega: dom.dataEntregaInput.value,
-            };
-
-            if (dom.formPedido.dataset.editingId) {
-                const idToUpdate = parseInt(dom.formPedido.dataset.editingId);
-                const index = state.pedidos.findIndex(p => p.id === idToUpdate);
-                if (index !== -1) {
-                    state.pedidos[index] = { ...state.pedidos[index], ...novoPedido };
-                }
-                delete dom.formPedido.dataset.editingId;
-            } else {
-                state.pedidos.push(novoPedido);
-            }
-
-            utils.saveData();
-            dom.formPedido.reset();
-            utils.displayMessage('Pedido salvo com sucesso!');
-            pedidosModule.preencherCamposIniciais();
-            pedidosModule.updateDatalists();
-            tabManager.switchSubTab('cadastrar-pedido', 'pedidos-container');
-        },
-        autoPreencherPedido: () => {
-            const nomeProdutoSelecionado = dom.nomeProdutoInput.value.toLowerCase();
-            const pedidosFiltrados = state.pedidos.filter(p => p.nomeProduto.toLowerCase() === nomeProdutoSelecionado);
-            
-            if (pedidosFiltrados.length > 0) {
-                const ultimoPedido = pedidosFiltrados.reduce((ultimo, atual) => {
-                    return new Date(atual.dataPedido) > new Date(ultimo.dataPedido) ? atual : ultimo;
-                });
-                
-                document.getElementById('marca-produto').value = ultimoPedido.marcaProduto;
-                document.getElementById('fornecedor').value = ultimoPedido.fornecedor;
-                dom.valorUnidadeInput.value = utils.formatCurrency(ultimoPedido.valorUnidade);
-                document.getElementById('medida-unidade').value = ultimoPedido.medidaUnidade;
-                dom.quantidadePedidaInput.value = ultimoPedido.quantidadePedida.toFixed(2).replace('.', ',');
-
-                pedidosModule.calcularValorTotal();
-            }
-        },
-        initializeSearch: () => {
-            const today = new Date().toISOString().split('T')[0];
-            dom.searchDataInicio.value = today;
-            dom.searchDataFim.value = today;
-            pedidosModule.searchPedidos();
-        },
-        searchPedidos: (filtroNaoEntregues = false) => {
-            const dataInicio = dom.searchDataInicio.value ? new Date(dom.searchDataInicio.value + 'T00:00:00') : null;
-            const dataFim = dom.searchDataFim.value ? new Date(dom.searchDataFim.value + 'T23:59:59') : null;
-            const searchLojaValue = dom.searchLoja.value;
-            const searchProduto = dom.searchProduto.value.toLowerCase();
-            const searchMarca = dom.searchMarca.value.toLowerCase();
-            const searchFornecedor = dom.searchFornecedor.value.toLowerCase();
-        
-            const resultados = state.pedidos.filter(p => {
-                const pedidoDate = new Date(p.dataPedido + 'T00:00:00');
-                const matchDate = (!dataInicio || pedidoDate >= dataInicio) && (!dataFim || pedidoDate <= dataFim);
-                const matchLoja = !searchLojaValue || p.loja === searchLojaValue;
-                const matchProduto = p.nomeProduto.toLowerCase().includes(searchProduto);
-                const matchMarca = p.marcaProduto.toLowerCase().includes(searchMarca);
-                const matchFornecedor = p.fornecedor.toLowerCase().includes(searchFornecedor);
-                const matchNaoEntregues = !filtroNaoEntregues || !p.dataEntrega;
-            
-                return matchDate && matchLoja && matchProduto && matchMarca && matchFornecedor && matchNaoEntregues;
-            }).sort((a, b) => new Date(b.dataPedido) - new Date(a.dataPedido));
-        
-            pedidosModule.renderPedidos(resultados);
-        },
-        renderPedidos: (lista) => {
-            const tabelaHTML = `
-                <p id="total-results">Total de resultados: ${lista.length}</p>
-                <div class="table-container">
-                    <table id="tabela-pedidos">
-                        <thead class="table-header">
-                            <tr>
-                                <th><input type="checkbox" id="select-all-checkbox" aria-label="Selecionar todos os pedidos"></th>
-                                <th class="col-data">Data</th>
-                                <th>Loja</th>
-                                <th>Produto</th>
-                                <th>Marca</th>
-                                <th>Fornecedor</th>
-                                <th>Valor Unidade</th>
-                                <th>Medida</th>
-                                <th>Qtd Pedida</th>
-                                <th>Valor Total</th>
-                                <th class="col-data">Entrega</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div class="summary-block">
-                    <h4>Totais dos Itens Selecionados</h4>
-                    <p>Valor Unidade Total: <span id="total-valor-unidade">0</span></p>
-                    <p>Quantidade Pedida Total: <span id="total-quantidade-pedida">0</span></p>
-                    <p>Valor Total: <span id="total-valor-total">0</span></p>
-                </div>
-            `;
-            dom.resultsContainer.innerHTML = tabelaHTML;
-
-            dom.tabelaPedidosBody = document.querySelector('#tabela-pedidos tbody');
-            dom.selectAllCheckbox = document.getElementById('select-all-checkbox');
-            dom.totalResultsP = document.getElementById('total-results');
-            dom.sumResultsDiv = document.querySelector('.summary-block');
-            dom.totalValorUnidadeSpan = document.getElementById('total-valor-unidade');
-            dom.totalQuantidadePedidaSpan = document.getElementById('total-quantidade-pedida');
-            dom.totalValorTotalSpan = document.getElementById('total-valor-total');
-
-            const fragment = document.createDocumentFragment();
-            lista.forEach(pedido => {
-                const row = document.createElement('tr');
-                const entregaCellContent = pedido.dataEntrega
-                    ? utils.formatDateToBR(pedido.dataEntrega)
-                    : `<span class="receive-icon" data-id="${pedido.id}"></span>`;
-        
-                row.innerHTML = `
-                    <td><input type="checkbox" class="select-pedido-checkbox" data-id="${pedido.id}"></td>
-                    <td>${utils.formatDateToBR(pedido.dataPedido)}</td>
-                    <td>${pedido.loja}</td>
-                    <td>${pedido.nomeProduto}</td>
-                    <td>${pedido.marcaProduto}</td>
-                    <td>${pedido.fornecedor}</td>
-                    <td>${utils.formatCurrency(pedido.valorUnidade)}</td>
-                    <td>${pedido.medidaUnidade}</td>
-                    <td>${pedido.quantidadePedida.toFixed(2).replace('.', ',')}</td>
-                    <td>${utils.formatCurrency(pedido.valorTotal)}</td>
-                    <td>${entregaCellContent}</td>
-                    <td class="action-buttons">
-                        <button class="btn-action btn-edit" data-id="${pedido.id}">Editar</button>
-                        <button class="btn-action btn-delete" data-id="${pedido.id}">Excluir</button>
-                    </td>
-                `;
-                fragment.appendChild(row);
-            });
-            dom.tabelaPedidosBody.appendChild(fragment);
-            if(dom.selectAllCheckbox) dom.selectAllCheckbox.checked = false;
-        },
-        handleTableClick: (e) => {
-            const { target } = e;
-            const id = parseInt(target.dataset.id);
-            if (!id) return;
-        
-            if (target.classList.contains('receive-icon')) {
-                const pedidoToUpdate = state.pedidos.find(p => p.id === id);
-                if (pedidoToUpdate) {
-                    pedidoToUpdate.dataEntrega = new Date().toISOString().split('T')[0];
-                    utils.saveData();
-                    pedidosModule.searchPedidos();
-                }
-            } else if (target.classList.contains('btn-edit')) {
-                pedidosModule.editPedido(id);
-            } else if (target.classList.contains('btn-delete')) {
-                pedidosModule.deletePedido(id);
-            }
-        },
-        handleCheckboxChange: (e) => {
-            const { target } = e;
-            if (target === dom.selectAllCheckbox) {
-                document.querySelectorAll('.select-pedido-checkbox').forEach(checkbox => {
-                    checkbox.checked = target.checked;
-                });
-            }
-            state.selectedPedidos = Array.from(document.querySelectorAll('.select-pedido-checkbox:checked')).map(cb => parseInt(cb.dataset.id));
-            pedidosModule.updateSelectedTotals();
-        },
-        updateSelectedTotals: () => {
-            if (state.selectedPedidos.length === 0) {
-                dom.sumResultsDiv.style.display = 'none';
-                return;
-            }
-        
-            dom.sumResultsDiv.style.display = 'block';
-            const totals = state.selectedPedidos.reduce((acc, id) => {
-                const pedido = state.pedidos.find(p => p.id === id);
-                if (pedido) {
-                    acc.valorUnidade += pedido.valorUnidade;
-                    acc.quantidadePedida += pedido.quantidadePedida;
-                    acc.valorTotal += pedido.valorTotal;
-                }
-                return acc;
-            }, { valorUnidade: 0, quantidadePedida: 0, valorTotal: 0 });
-        
-            dom.totalValorUnidadeSpan.textContent = utils.formatCurrency(totals.valorUnidade);
-            dom.totalQuantidadePedidaSpan.textContent = totals.quantidadePedida.toFixed(2).replace('.', ',');
-            dom.totalValorTotalSpan.textContent = utils.formatCurrency(totals.valorTotal);
-        },
-        editPedido: (id) => {
-            const pedidoToEdit = state.pedidos.find(p => p.id === id);
-            if (pedidoToEdit) {
-                dom.dataPedidoInput.value = pedidoToEdit.dataPedido;
-                dom.lojaSelect.value = pedidoToEdit.loja;
-                document.getElementById('nome-produto').value = pedidoToEdit.nomeProduto;
-                document.getElementById('marca-produto').value = pedidoToEdit.marcaProduto;
-                document.getElementById('fornecedor').value = pedidoToEdit.fornecedor;
-                dom.valorUnidadeInput.value = utils.formatCurrency(pedidoToEdit.valorUnidade);
-                document.getElementById('medida-unidade').value = pedidoToEdit.medidaUnidade;
-                dom.quantidadePedidaInput.value = pedidoToEdit.quantidadePedida.toFixed(2).replace('.', ',');
-                dom.valorTotalInput.value = utils.formatCurrency(pedidoToEdit.valorTotal);
-                dom.dataEntregaInput.value = pedidoToEdit.dataEntrega;
-                dom.formPedido.dataset.editingId = id;
-                tabManager.switchSubTab('cadastrar-pedido', 'pedidos-container');
-            }
-        },
-        deletePedido: (id) => {
-            if (confirm('Tem certeza que deseja excluir este pedido?')) {
-                state.pedidos = state.pedidos.filter(p => p.id !== id);
-                utils.saveData();
-                pedidosModule.searchPedidos();
-                utils.displayMessage('Pedido excluído com sucesso!');
-            }
-        },
-        resetReportView: () => {
-            dom.btnExportExcel.style.display = 'none';
-            dom.reportResultsDiv.innerHTML = '';
-        },
-        generateReport: () => {
-            const reportType = dom.reportTypeSelect.value;
-            const searchFilters = {
-                produto: dom.reportSearchProduto.value.toLowerCase(),
-                marca: dom.reportSearchMarca.value.toLowerCase(),
-                fornecedor: dom.reportSearchFornecedor.value.toLowerCase()
-            };
-
-            let pedidosRelatorio = state.pedidos.filter(p => {
-                return p.nomeProduto.toLowerCase().includes(searchFilters.produto) &&
-                       p.marcaProduto.toLowerCase().includes(searchFilters.marca) &&
-                       p.fornecedor.toLowerCase().includes(searchFilters.fornecedor);
-            });
-
-            switch (reportType) {
-                case 'por-fornecedor':
-                    pedidosRelatorio.sort((a, b) => a.fornecedor.localeCompare(b.fornecedor) || new Date(a.dataPedido) - new Date(b.dataPedido));
-                    break;
-                case 'por-produto':
-                    pedidosRelatorio.sort((a, b) => a.nomeProduto.localeCompare(b.nomeProduto) || new Date(a.dataPedido) - new Date(b.dataPedido));
-                    break;
-                case 'por-marca':
-                    pedidosRelatorio.sort((a, b) => a.marcaProduto.localeCompare(b.marcaProduto) || new Date(a.dataPedido) - new Date(b.dataPedido));
-                    break;
-                default:
-                    pedidosRelatorio.sort((a, b) => new Date(a.dataPedido) - new Date(b.dataPedido));
-            }
-            
-            const reportTitleMap = {
-                'mensal-geral': 'Relatório Mensal de Pedidos',
-                'por-produto': 'Relatório por Nome do Produto',
-                'por-marca': 'Relatório por Marca do Produto',
-                'por-fornecedor': 'Relatório por Fornecedor'
-            };
-            const reportTitle = reportTitleMap[reportType] || 'Relatório de Pedidos';
-            
-            let reportHtml = `<h2>${reportTitle}</h2>`;
-            reportHtml += `
-                <div class="table-container">
-                    <table id="report-table">
-                        <thead class="table-header">
-                            <tr><th>Data</th><th>Loja</th><th>Produto</th><th>Marca</th><th>Fornecedor</th><th>Valor Unidade</th><th>Medida</th><th>Qtd Pedida</th><th>Valor Total</th></tr>
-                        </thead>
-                        <tbody>`;
-            
-            let totalSum = 0;
-            pedidosRelatorio.forEach(p => {
-                reportHtml += `<tr>
-                    <td>${utils.formatDateToBR(p.dataPedido)}</td>
-                    <td>${p.loja}</td>
-                    <td>${p.nomeProduto}</td>
-                    <td>${p.marcaProduto}</td>
-                    <td>${p.fornecedor}</td>
-                    <td>${utils.formatCurrency(p.valorUnidade)}</td>
-                    <td>${p.medidaUnidade}</td>
-                    <td>${p.quantidadePedida.toFixed(2).replace('.', ',')}</td>
-                    <td>${utils.formatCurrency(p.valorTotal)}</td>
-                </tr>`;
-                totalSum += p.valorTotal;
-            });
-            
-            reportHtml += `</tbody></table></div>`;
-            reportHtml += `
-                <div class="summary-block">
-                    <h4>Valor Total Geral</h4>
-                    <p>Total: <span class="valor-total">${utils.formatCurrency(totalSum)}</span></p>
-                </div>
-            `;
-            
-            dom.reportResultsDiv.innerHTML = reportHtml;
-            dom.btnExportExcel.style.display = 'block';
-        },
-        updateDatalists: () => {
-            const createOptions = (list) => list.map(item => `<option value="${item}"></option>`).join('');
-            dom.produtosDatalist.innerHTML = createOptions(state.produtos.sort());
-            dom.marcasDatalist.innerHTML = createOptions(state.marcas.sort());
-            dom.fornecedoresDatalist.innerHTML = createOptions(state.fornecedores.sort());
-        },
-        exportExcel: () => {
-            const table = document.getElementById('report-table');
-            if (!table) {
-                utils.displayMessage("Nenhum relatório para exportar.");
-                return;
-            }
-            const worksheet = XLSX.utils.table_to_sheet(table);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatório de Pedidos');
-            XLSX.writeFile(workbook, 'relatorio_pedidos.xlsx');
-        }
-    };
-    
-    const controle043Module = {
-        preencherCamposIniciais: () => {
-            dom.data043Input.value = new Date().toISOString().split('T')[0];
-            dom.form043.dataset.editingId = '';
-            dom.form043.reset();
-        },
-        submitForm: (e) => {
-            e.preventDefault();
-            const novoLancamento = {
-                id: dom.form043.dataset.editingId ? parseInt(dom.form043.dataset.editingId) : Date.now(),
-                data: dom.data043Input.value,
-                loja: dom.loja043Select.value,
-                tipo: dom.tipoLancamentoSelect.value,
-                valor: utils.parseCurrency(dom.valor043Input.value),
-                descricao: dom.descricao043Textarea.value
-            };
-            
-            if (dom.form043.dataset.editingId) {
-                const index = state.lancamentos.findIndex(l => l.id === novoLancamento.id);
-                if (index !== -1) {
-                    state.lancamentos[index] = novoLancamento;
-                }
-            } else {
-                state.lancamentos.push(novoLancamento);
-            }
-            
-            utils.saveData();
-            utils.displayMessage('Lançamento salvo com sucesso!');
-            controle043Module.preencherCamposIniciais();
-            tabManager.switchSubTab('inclusao-043', 'controle-043-container');
-        },
-        preencherFiltros: () => {
-            const lancamentoYears = [...new Set(state.lancamentos.map(l => new Date(l.data).getFullYear()))].sort((a, b) => b - a);
-            dom.searchAno043.innerHTML = `<option value="">Todos os Anos</option>` + lancamentoYears.map(year => `<option value="${year}">${year}</option>`).join('');
-        },
-        searchLancamentos: () => {
-            const { searchData043, searchMes043, searchAno043, searchLoja043, searchTipo043, filtroConsulta043 } = dom;
-            const resultados = state.lancamentos.filter(l => {
-                const lancamentoDate = new Date(l.data + 'T00:00:00');
-                return (
-                    (!searchData043.value || l.data === searchData043.value) &&
-                    (!searchMes043.value || (lancamentoDate.getMonth() + 1).toString().padStart(2, '0') === searchMes043.value) &&
-                    (!searchAno043.value || lancamentoDate.getFullYear().toString() === searchAno043.value) &&
-                    (!searchLoja043.value || l.loja === searchLoja043.value) &&
-                    (!searchTipo043.value || l.tipo === searchTipo043.value)
-                );
-            }).sort((a, b) => new Date(b.data) - new Date(a.data));
-            
-            filtroConsulta043.value === 'sintetico' ?
-                controle043Module.renderLancamentosSintetico(resultados) :
-                controle043Module.renderLancamentosDetalhado(resultados);
-        },
-        renderLancamentosDetalhado: (lista) => {
-            let totalCredito = 0;
-            let totalDebito = 0;
-            const html = lista.map(l => {
-                if (l.tipo === 'Credito') totalCredito += l.valor;
-                else totalDebito += l.valor;
-                return `
-                    <tr>
-                        <td>${utils.formatDateToBR(l.data)}</td>
-                        <td>${l.loja}</td>
-                        <td class="valor-${l.tipo.toLowerCase()}">${l.tipo}</td>
-                        <td>${utils.formatCurrency(l.valor)}</td>
-                        <td>${l.descricao || '-'}</td>
-                        <td class="action-buttons">
-                            <button class="btn-action btn-edit-043" data-id="${l.id}">Editar</button>
-                            <button class="btn-action btn-delete-043" data-id="${l.id}">Excluir</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-            
-            const saldo = totalCredito - totalDebito;
-            dom.results043Div.innerHTML = `
-                <div class="table-container">
-                    <table id="tabela-043">
-                        <thead class="table-header">
-                            <tr><th>Data</th><th>Loja</th><th>Tipo</th><th>Valor</th><th>Descrição</th><th>Ações</th></tr>
-                        </thead>
-                        <tbody>${html}</tbody>
-                    </table>
-                </div>
-                <div class="summary-block">
-                    <h4>Totais de Lançamentos</h4>
-                    <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(totalCredito)}</span></p>
-                    <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(totalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
-                </div>
-            `;
-        },
-        renderLancamentosSintetico: (lista) => {
-            if (lista.length === 0) {
-                dom.results043Div.innerHTML = '<p>Nenhum resultado encontrado.</p>';
-                return;
-            }
-            const { summary, grandTotalCredito, grandTotalDebito } = utils.groupAndSumByDate(lista);
-            const saldoGeral = grandTotalCredito - grandTotalDebito;
-            
-            const html = summary.map(day => `
-                <tr>
-                    <td>${utils.formatDateToBR(day.data)}</td>
-                    <td class="valor-credito">${utils.formatCurrency(day.credito)}</td>
-                    <td class="valor-debito">${utils.formatCurrency(day.debito)}</td>
-                    <td class="valor-saldo">${utils.formatCurrency(day.totalDia)}</td>
-                </tr>
-            `).join('');
-            dom.results043Div.innerHTML = `
-                <div class="table-container">
-                    <table class="tabela-sintetico">
-                        <thead class="table-header">
-                            <tr><th>Data</th><th>Créditos</th><th>Débitos</th><th>Total do Dia</th></tr>
-                        </thead>
-                        <tbody>${html}</tbody>
-                    </table>
-                </div>
-                <div class="summary-block">
-                    <h4>Totais de Lançamentos</h4>
-                    <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(grandTotalCredito)}</span></p>
-                    <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(grandTotalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
-                </div>
-            `;
-        },
-        handleResultsClick: (e) => {
-            const { target } = e;
-            const id = parseInt(target.dataset.id);
-            if (!id) return;
-        
-            if (target.classList.contains('btn-edit-043')) {
-                controle043Module.editLancamento(id);
-            } else if (target.classList.contains('btn-delete-043')) {
-                controle043Module.deleteLancamento(id);
-            }
-        },
-        editLancamento: (id) => {
-            const lancamentoToEdit = state.lancamentos.find(l => l.id === id);
-            if (lancamentoToEdit) {
-                dom.data043Input.value = lancamentoToEdit.data;
-                dom.loja043Select.value = lancamentoToEdit.loja;
-                dom.tipoLancamentoSelect.value = lancamentoToEdit.tipo;
-                dom.valor043Input.value = utils.formatCurrency(lancamentoToEdit.valor);
-                dom.descricao043Textarea.value = lancamentoToEdit.descricao;
-                dom.form043.dataset.editingId = id;
-                tabManager.switchSubTab('inclusao-043', 'controle-043-container');
-            }
-        },
-        deleteLancamento: (id) => {
-            if (confirm('Tem certeza que deseja excluir este lançamento?')) {
-                state.lancamentos = state.lancamentos.filter(l => l.id !== id);
-                utils.saveData();
-                controle043Module.searchLancamentos();
-                utils.displayMessage('Lançamento excluído com sucesso!');
-            }
-        },
-        preencherFiltrosRelatorio: () => {
-            const lancamentoYears = [...new Set(state.lancamentos.map(l => new Date(l.data).getFullYear()))].sort((a, b) => b - a);
-            dom.reportSearchAno043.innerHTML = `<option value="">Todos os Anos</option>` + lancamentoYears.map(year => `<option value="${year}">${year}</option>`).join('');
-        },
-        generateReport: () => {
-            const reportType = dom.relatorioTipo043.value;
-            const searchFilters = {
-                loja: dom.reportSearchLoja043.value,
-                data: dom.reportSearchData043.value,
-                mes: dom.reportSearchMes043.value,
-                ano: dom.reportSearchAno043.value,
-                tipo: dom.reportSearchTipo043.value,
-            };
-
-            let lancamentosRelatorio = state.lancamentos.filter(l => {
-                const lancamentoDate = new Date(l.data + 'T00:00:00');
-                return (
-                    (!searchFilters.loja || l.loja === searchFilters.loja) &&
-                    (!searchFilters.data || l.data === searchFilters.data) &&
-                    (!searchFilters.mes || (lancamentoDate.getMonth() + 1).toString().padStart(2, '0') === searchFilters.mes) &&
-                    (!searchFilters.ano || lancamentoDate.getFullYear().toString() === searchFilters.ano) &&
-                    (!searchFilters.tipo || l.tipo === searchFilters.tipo)
-                );
-            });
-        
-            if (reportType === 'soma-total') {
-                controle043Module.renderReportSintetico(lancamentosRelatorio);
-            } else {
-                controle043Module.renderReportDetalhado(lancamentosRelatorio);
-            }
-            dom.btnExportExcel043.style.display = 'block';
-        },
-        renderReportDetalhado: (lista) => {
-            let totalCredito = 0;
-            let totalDebito = 0;
-            const html = lista.map(l => {
-                if (l.tipo === 'Credito') totalCredito += l.valor;
-                else totalDebito += l.valor;
-                return `
-                    <tr>
-                        <td>${utils.formatDateToBR(l.data)}</td>
-                        <td>${l.loja}</td>
-                        <td class="valor-${l.tipo.toLowerCase()}">${l.tipo}</td>
-                        <td>${utils.formatCurrency(l.valor)}</td>
-                        <td>${l.descricao || '-'}</td>
-                    </tr>
-                `;
-            }).join('');
-            const saldo = totalCredito - totalDebito;
-            dom.reportResults043Div.innerHTML = `
-                <div class="table-container">
-                    <table id="tabela-relatorio-043">
-                        <thead class="table-header">
-                            <tr><th>Data</th><th>Loja</th><th>Tipo</th><th>Valor</th><th>Descrição</th></tr>
-                        </thead>
-                        <tbody>${html}</tbody>
-                    </table>
-                </div>
-                <div class="summary-block">
-                    <h4>Totais de Lançamentos</h4>
-                    <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(totalCredito)}</span></p>
-                    <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(totalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
-                </div>
-            `;
-        },
-        renderReportSintetico: (lista) => {
-            const { summary, grandTotalCredito, grandTotalDebito } = utils.groupAndSumByDate(lista);
-            const saldoGeral = grandTotalCredito - grandTotalDebito;
-            const html = summary.map(day => `
-                <tr>
-                    <td>${utils.formatDateToBR(day.data)}</td>
-                    <td class="valor-credito">${utils.formatCurrency(day.credito)}</td>
-                    <td class="valor-debito">${utils.formatCurrency(day.debito)}</td>
-                    <td class="valor-saldo">${utils.formatCurrency(day.totalDia)}</td>
-                </tr>
-            `).join('');
-            dom.reportResults043Div.innerHTML = `
-                <div class="table-container">
-                    <table id="tabela-relatorio-043" class="tabela-sintetico">
-                        <thead class="table-header">
-                            <tr><th>Data</th><th>Créditos</th><th>Débitos</th><th>Total do Dia</th></tr>
-                        </thead>
-                        <tbody>${html}</tbody>
-                    </table>
-                </div>
-                <div class="summary-block">
-                    <h4>Totais de Lançamentos</h4>
-                    <p>Total de Créditos: <span class="valor-credito">${utils.formatCurrency(grandTotalCredito)}</span></p>
-                    <p>Total de Débitos: <span class="valor-debito">${utils.formatCurrency(grandTotalDebito)}</span></p>
-                    <p>Saldo: <span class="valor-saldo">${utils.formatCurrency(saldo)}</span></p>
-                </div>
-            `;
-        },
-        exportExcel: () => {
-            const table = document.getElementById('tabela-relatorio-043');
-            if (!table) {
-                utils.displayMessage("Nenhum relatório para exportar.");
-                return;
-            }
-            const worksheet = XLSX.utils.table_to_sheet(table);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatório 043');
-            XLSX.writeFile(workbook, 'relatorio_043.xlsx');
-        }
-    };
-    
-    const financeiroModule = {
-        preencherCampos: () => {
-            const today = new Date();
-            dom.anoMensalSelect.innerHTML = `<option value="${today.getFullYear()}">${today.getFullYear()}</option>`;
-            dom.mesMensalSelect.value = (today.getMonth() + 1).toString().padStart(2, '0');
-            dom.lojaMensalSelect.value = 'Hero Joquei';
-            dom.formLancamentoMensal.dataset.editingId = '';
-            financeiroModule.resetForm();
-            financeiroModule.preencherFiltrosRelatorio();
-            financeiroModule.preencherFiltrosConsulta();
-        },
-        resetForm: () => {
-            dom.caixaEconomicaInput.value = '';
-            dom.cofreInput.value = '';
-            dom.loteriaInput.value = '';
-            dom.pagbankhInput.value = '';
-            dom.pagbankdInput.value = '';
-            dom.investimentoInput.value = '0,00';
-            dom.lucroMesInput.value = 'R$ 0,00';
-            dom.totalMensalInput.value = 'R$ 0,00';
-        },
-        calcularTotais: () => {
-            const caixaEconomica = utils.parseMensalValue(dom.caixaEconomicaInput.value);
-            const cofre = utils.parseMensalValue(dom.cofreInput.value);
-            const loteria = utils.parseMensalValue(dom.loteriaInput.value);
-            const pagbankh = utils.parseMensalValue(dom.pagbankhInput.value);
-            const pagbankd = utils.parseMensalValue(dom.pagbankdInput.value);
-            const investimento = utils.parseMensalValue(dom.investimentoInput.value);
-            
-            const lucroMes = caixaEconomica + cofre + loteria + pagbankh + pagbankd;
-            const total = lucroMes + investimento;
-            
-            dom.lucroMesInput.value = utils.formatCurrency(lucroMes);
-            dom.totalMensalInput.value = utils.formatCurrency(total);
-        },
-        submitForm: (e) => {
-            e.preventDefault();
-            const { lojaMensalSelect, anoMensalSelect, mesMensalSelect, formLancamentoMensal } = dom;
-            const novoLancamentoMensal = {
-                id: formLancamentoMensal.dataset.editingId ? parseInt(formLancamentoMensal.dataset.editingId) : Date.now(),
-                loja: lojaMensalSelect.value,
-                ano: anoMensalSelect.value,
-                mes: mesMensalSelect.value,
-                caixaEconomica: utils.parseMensalValue(dom.caixaEconomicaInput.value),
-                cofre: utils.parseMensalValue(dom.cofreInput.value),
-                loteria: utils.parseMensalValue(dom.loteriaInput.value),
-                pagbankh: utils.parseMensalValue(dom.pagbankhInput.value),
-                pagbankd: utils.parseMensalValue(dom.pagbankdInput.value),
-                investimento: utils.parseMensalValue(dom.investimentoInput.value),
-                lucroMes: utils.parseMensalValue(dom.lucroMesInput.value),
-                total: utils.parseMensalValue(dom.totalMensalInput.value),
-            };
-            
-            if (formLancamentoMensal.dataset.editingId) {
-                const index = state.lancamentosMensais.findIndex(l => l.id === novoLancamentoMensal.id);
-                if (index !== -1) {
-                    state.lancamentosMensais[index] = novoLancamentoMensal;
-                }
-            } else {
-                state.lancamentosMensais.push(novoLancamentoMensal);
-            }
-            
-            utils.saveData();
-            utils.displayMessage('Lançamento mensal salvo com sucesso!');
-            financeiroModule.preencherCampos();
-        },
-        preencherFiltrosRelatorio: () => {
-            const lancamentoMensalYears = [...new Set(state.lancamentosMensais.map(l => l.ano))].sort((a, b) => b - a);
-            dom.relAnoMensalSelect.innerHTML = `<option value="">Todos os Anos</option>` + lancamentoMensalYears.map(year => `<option value="${year}">${year}</option>`).join('');
-            dom.consAnoMensalSelect.innerHTML = dom.relAnoMensalSelect.innerHTML;
-        },
-        generateRelatorio: () => {
-            const { relLojaMensalSelect, relAnoMensalSelect, relMesMensalSelect } = dom;
-            const filteredAndSorted = state.lancamentosMensais.filter(l => {
-                return (
-                    (!relLojaMensalSelect.value || l.loja === relLojaMensalSelect.value) &&
-                    (!relAnoMensalSelect.value || l.ano === relAnoMensalSelect.value) &&
-                    (!relMesMensalSelect.value || l.mes === relMesMensalSelect.value)
-                );
-            }).sort((a, b) => {
-                if (a.ano !== b.ano) return a.ano - b.ano;
-                return parseInt(a.mes) - parseInt(b.mes);
-            });
-            
-            const monthlyData = filteredAndSorted.reduce((acc, l) => {
-                const key = `${l.ano}-${l.mes}`;
-                acc[key] = acc[key] || { 'Hero Joquei': 0, 'Hero Shopping': 0, 'Hero Centro': 0, investimento: 0, total: 0 };
-                acc[key][l.loja] = l.lucroMes;
-                acc[key].investimento += l.investimento;
-                acc[key].total += l.total;
-                return acc;
-            }, {});
-            
-            const sortedKeys = Object.keys(monthlyData).sort((a, b) => {
-                const [anoA, mesA] = a.split('-').map(Number);
-                const [anoB, mesB] = b.split('-').map(Number);
-                if (anoA !== anoB) return anoA - anoB;
-                return mesA - mesB;
-            });
-            
-            let finalTotals = { 'Hero Joquei': 0, 'Hero Shopping': 0, 'Hero Centro': 0, investimento: 0, totalGeral: 0 };
-            let tableRows = sortedKeys.map(key => {
-                const [ano, mes] = key.split('-');
-                const data = monthlyData[key];
-                const lucroJoquei = data['Hero Joquei'] || 0;
-                const lucroShopping = data['Hero Shopping'] || 0;
-                const lucroCentro = data['Hero Centro'] || 0;
-                const investimentoMensal = data.investimento || 0;
-                const totalMensal = data.total || 0;
-                
-                finalTotals['Hero Joquei'] += lucroJoquei;
-                finalTotals['Hero Shopping'] += lucroShopping;
-                finalTotals['Hero Centro'] += lucroCentro;
-                finalTotals.investimento += investimentoMensal;
-                finalTotals.totalGeral += totalMensal;
-            
-                return `
-                    <tr>
-                        <td>${utils.getMonthName(parseInt(mes))}/${ano}</td>
-                        <td>${utils.formatCurrency(lucroJoquei)}</td>
-                        <td>${utils.formatCurrency(lucroShopping)}</td>
-                        <td>${utils.formatCurrency(lucroCentro)}</td>
-                        <td>${utils.formatCurrency(investimentoMensal)}</td>
-                        <td>${utils.formatCurrency(totalMensal)}</td>
-                    </tr>
-                `;
-            }).join('');
-            
-            dom.relatorioMensalResultadosDiv.innerHTML = `
-                <h2>Relatório Mensal de Lucros</h2>
-                <div class="table-container">
-                    <table id="tabela-mensal-relatorio">
-                        <thead class="table-header">
-                            <tr><th>Mês/Ano</th><th>Lucro H. Joquei</th><th>Lucro H. Shopping</th><th>Lucro H. Centro</th><th>Investimento</th><th>Total</th></tr>
-                        </thead>
-                        <tbody>${tableRows}</tbody>
-                    </table>
-                </div>
-                <div class="summary-block">
-                    <h4>Totais Acumulados</h4>
-                    <p>Lucro H. Joquei: ${utils.formatCurrency(finalTotals['Hero Joquei'])}</p>
-                    <p>Lucro H. Shopping: ${utils.formatCurrency(finalTotals['Hero Shopping'])}</p>
-                    <p>Lucro H. Centro: ${utils.formatCurrency(finalTotals['Hero Centro'])}</p>
-                    <p>Investimento: ${utils.formatCurrency(finalTotals.investimento)}</p>
-                    <p>Total Geral: ${utils.formatCurrency(finalTotals.totalGeral)}</p>
-                </div>
-            `;
-            dom.btnExportExcelMensal.style.display = 'block';
-        },
-        exportExcel: () => {
-            const table = document.getElementById('tabela-mensal-relatorio');
-            const tableAcumulada = document.getElementById('tabela-acumulados-mensal');
-            if (!table) {
-                utils.displayMessage("Nenhum relatório para exportar.");
-                return;
-            }
-            const worksheet = XLSX.utils.table_to_sheet(table);
-            if (tableAcumulada) {
-                XLSX.utils.sheet_add_aoa(worksheet, [['']], { origin: -1 });
-                XLSX.utils.sheet_add_dom(worksheet, tableAcumulada, { origin: -1, skiprows: 1 });
-            }
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, 'Relatório Mensal');
-            XLSX.writeFile(workbook, 'relatorio_financeiro_mensal.xlsx');
-        },
-        preencherFiltrosConsulta: () => {
-            const lancamentoMensalYears = [...new Set(state.lancamentosMensais.map(l => l.ano))].sort((a, b) => b - a);
-            const options = `<option value="">Todos os Anos</option>` + lancamentoMensalYears.map(year => `<option value="${year}">${year}</option>`).join('');
-            dom.consAnoMensalSelect.innerHTML = options;
-        },
-        searchLancamentos: () => {
-            const { consLojaMensalSelect, consAnoMensalSelect, consMesMensalSelect } = dom;
-            const resultados = state.lancamentosMensais.filter(l => {
-                return (
-                    (!consLojaMensalSelect.value || l.loja === consLojaMensalSelect.value) &&
-                    (!consAnoMensalSelect.value || l.ano === consAnoMensalSelect.value) &&
-                    (!consMesMensalSelect.value || l.mes === consMesMensalSelect.value)
-                );
-            }).sort((a, b) => {
-                if (a.ano !== b.ano) return a.ano - b.ano;
-                return parseInt(a.mes) - parseInt(b.mes);
-            });
-            financeiroModule.renderConsulta(resultados);
-        },
-        renderConsulta: (lista) => {
-            const html = lista.map(l => `
-                <tr>
-                    <td>${l.loja}</td>
-                    <td>${utils.getMonthName(parseInt(l.mes))}/${l.ano}</td>
-                    <td>${utils.formatCurrency(l.caixaEconomica)}</td>
-                    <td>${utils.formatCurrency(l.cofre)}</td>
-                    <td>${utils.formatCurrency(l.loteria)}</td>
-                    <td>${utils.formatCurrency(l.pagbankh)}</td>
-                    <td>${utils.formatCurrency(l.pagbankd)}</td>
-                    <td>${utils.formatCurrency(l.investimento)}</td>
-                    <td>${utils.formatCurrency(l.lucroMes)}</td>
-                    <td>${utils.formatCurrency(l.total)}</td>
-                    <td class="action-buttons">
-                        <button class="btn-action btn-edit-mensal" data-id="${l.id}">Editar</button>
-                        <button class="btn-action btn-delete-mensal" data-id="${l.id}">Excluir</button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            dom.consultaMensalResultadosDiv.innerHTML = `
-                <h2>Resultados da Consulta</h2>
-                <div class="table-container">
-                    <table id="tabela-consulta-mensal">
-                        <thead class="table-header">
-                            <tr><th>Loja</th><th>Mês/Ano</th><th>Caixa Econômica</th><th>Cofre</th><th>Loteria</th><th>PagBank H</th><th>PagBank D</th><th>Investimento</th><th>Lucro Mês</th><th>Total</th><th>Ações</th></tr>
-                        </thead>
-                        <tbody>${html}</tbody>
-                    </table>
-                </div>
-            `;
-        },
-        handleConsultaClick: (e) => {
-            const { target } = e;
-            const id = parseInt(target.dataset.id);
-            if (!id) return;
-        
-            if (target.classList.contains('btn-edit-mensal')) {
-                financeiroModule.editLancamento(id);
-            } else if (target.classList.contains('btn-delete-mensal')) {
-                financeiroModule.deleteLancamento(id);
-            }
-        },
-        editLancamento: (id) => {
-            const lancamentoToEdit = state.lancamentosMensais.find(l => l.id === id);
-            if (lancamentoToEdit) {
-                const { lojaMensalSelect, anoMensalSelect, mesMensalSelect, caixaEconomicaInput, cofreInput, loteriaInput, pagbankhInput, pagbankdInput, investimentoInput, lucroMesInput, totalMensalInput, formLancamentoMensal } = dom;
-                lojaMensalSelect.value = lancamentoToEdit.loja;
-                anoMensalSelect.innerHTML = `<option value="${lancamentoToEdit.ano}">${lancamentoToEdit.ano}</option>`;
-                mesMensalSelect.value = lancamentoToEdit.mes;
-                
-                caixaEconomicaInput.value = utils.formatCurrency(lancamentoToEdit.caixaEconomica);
-                cofreInput.value = utils.formatCurrency(lancamentoToEdit.cofre);
-                loteriaInput.value = utils.formatCurrency(lancamentoToEdit.loteria);
-                pagbankhInput.value = utils.formatCurrency(lancamentoToEdit.pagbankh);
-                pagbankdInput.value = utils.formatCurrency(lancamentoToEdit.pagbankd);
-                investimentoInput.value = utils.formatCurrency(lancamentoToEdit.investimento);
-                lucroMesInput.value = utils.formatCurrency(lancamentoToEdit.lucroMes);
-                totalMensalInput.value = utils.formatCurrency(lancamentoToEdit.total);
-                
-                formLancamentoMensal.dataset.editingId = id;
-                tabManager.switchSubTab('lancamento-mensal', 'financeiro-container');
-            }
-        },
-        deleteLancamento: (id) => {
-            if (confirm('Tem certeza que deseja excluir este lançamento mensal?')) {
-                state.lancamentosMensais = state.lancamentosMensais.filter(l => l.id !== id);
-                utils.saveData();
-                financeiroModule.searchLancamentos();
-                utils.displayMessage('Lançamento mensal excluído com sucesso!');
-            }
-        }
-    };
-    
-    const camposModule = {
-        renderCampos: () => {
-            camposModule.renderList(state.produtos, dom.listaProdutosCampos, 'produtos');
-            camposModule.renderList(state.marcas, dom.listaMarcasCampos, 'marcas');
-            camposModule.renderList(state.fornecedores, dom.listaFornecedoresCampos, 'fornecedores');
-        },
-        renderList: (list, ulElement, type) => {
-            ulElement.innerHTML = '';
-            const fragment = document.createDocumentFragment();
-            list.forEach((item, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <span class="item-text">${item}</span>
-                    <div class="action-buttons">
-                        <button class="btn-action btn-edit-campo" data-index="${index}" data-type="${type}">Editar</button>
-                        <button class="btn-action btn-delete-campo" data-index="${index}" data-type="${type}">Excluir</button>
-                    </div>
-                `;
-                fragment.appendChild(li);
-            });
-            ulElement.appendChild(fragment);
-        },
-        addCampo: (list, inputElement) => {
-            const value = inputElement.value.trim();
-            if (value && !list.includes(value)) {
-                list.push(value);
-                list.sort();
-                utils.saveData();
-                inputElement.value = '';
-                camposModule.renderCampos();
-                pedidosModule.updateDatalists();
-                utils.displayMessage('Cadastrado com sucesso!');
-            }
-        },
-        handleCamposClick: (e) => {
-            const { target } = e;
-            const li = target.closest('li');
-            if (!li) return;
-        
-            const index = parseInt(target.dataset.index);
-            const type = target.dataset.type;
-            let list = state[type];
-        
-            if (target.classList.contains('btn-delete-campo')) {
-                camposModule.deleteCampo(list, index, type);
-            } else if (target.classList.contains('btn-edit-campo')) {
-                camposModule.editCampo(li, list[index], index, type);
-            } else if (target.classList.contains('btn-confirm')) {
-                const input = li.querySelector('.edit-input');
-                const newValue = input.value.trim();
-                if (newValue && !list.includes(newValue)) {
-                    list[index] = newValue;
-                    list.sort();
-                    utils.saveData();
-                    camposModule.renderCampos();
-                    pedidosModule.updateDatalists();
-                    utils.displayMessage('Editado com sucesso!');
-                } else {
-                    utils.displayMessage('Valor inválido ou já existente.');
-                }
-            }
-        },
-        deleteCampo: (list, index, type) => {
-            if (confirm(`Tem certeza que deseja excluir este(a) ${type.slice(0, -1)}?`)) {
-                list.splice(index, 1);
-                utils.saveData();
-                camposModule.renderCampos();
-                pedidosModule.updateDatalists();
-                utils.displayMessage('Excluído com sucesso!');
-            }
-        },
-        editCampo: (li, oldValue, index, type) => {
-            li.innerHTML = `
-                <input type="text" class="edit-input" value="${oldValue}" required>
-                <div class="action-buttons">
-                    <button class="btn-action btn-confirm" data-index="${index}" data-type="${type}">Salvar</button>
-                </div>
-            `;
-            li.querySelector('.edit-input').focus();
-        }
-    };
-
-    const backupModule = {
-        exportData: () => {
-            const data = {};
-            for (const key in state) {
-                if (Object.hasOwnProperty.call(state, key)) {
-                    data[key] = state[key];
-                }
-            }
-            
-            const jsonContent = JSON.stringify(data, null, 2);
-            
-            const blob = new Blob([jsonContent], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `backup_sistema_hero_${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            URL.revokeObjectURL(url);
-            utils.displayMessage('Backup dos dados exportado com sucesso!');
-        },
-        importData: (e) => {
-            const file = e.target.files[0];
-            if (!file) {
-                return;
-            }
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const importedData = JSON.parse(event.target.result);
+            <div id="pedidos-container" class="main-tab-content" role="tabpanel" aria-labelledby="pedidos-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação de Pedidos">
+                    <button class="nav-button sub-tab-button active" data-target="cadastrar-pedido" aria-controls="cadastrar-pedido" aria-selected="true" role="tab">Cadastrar</button>
+                    <button class="nav-button sub-tab-button" data-target="consultar-pedidos" aria-controls="consultar-pedidos" aria-selected="false" role="tab">Consulta</button>
+                    <button class="nav-button sub-tab-button" data-target="gerar-relatorio" aria-controls="gerar-relatorio" aria-selected="false" role="tab">Relatório</button>
+                    <button class="nav-button sub-tab-button" data-target="cadastrar-campos-section" aria-controls="cadastrar-campos-section" aria-selected="false" role="tab">Campos <span class="alert-icon" aria-label="Alerta">!</span></button>
+                </aside>
+                <div class="sub-content">
                     
-                    if (confirm('Atenção: Isso irá substituir todos os dados atuais do sistema. Tem certeza?')) {
-                        for (const key in importedData) {
-                            if (Object.hasOwnProperty.call(importedData, key)) {
-                                state[key] = importedData[key];
-                                localStorage.setItem(key, JSON.stringify(importedData[key]));
-                            }
-                        }
-                        utils.displayMessage('Dados restaurados com sucesso! O aplicativo será recarregado.');
-                        location.reload();
-                    }
-                } catch (error) {
-                    utils.displayMessage('Erro ao importar o arquivo. Verifique se o arquivo está no formato JSON correto.');
-                    console.error('Erro de importação:', error);
-                }
-            };
-            reader.readAsText(file);
-        }
-    };
-    
-    // 6. Configuração de Eventos
-    const setupEventListeners = () => {
-        dom.mainTabButtons.forEach(button => button.addEventListener('click', () => tabManager.switchMainTab(button.dataset.target)));
-        dom.subTabButtons.forEach(button => button.addEventListener('click', () => tabManager.switchSubTab(button.dataset.target, button.closest('.main-tab-content').id)));
-        dom.headerApp.addEventListener('click', () => tabManager.showMainMenu());
-        dom.formPedido.addEventListener('submit', pedidosModule.submitForm);
-        dom.nomeProdutoInput.addEventListener('change', pedidosModule.autoPreencherPedido);
-        dom.form043.addEventListener('submit', controle043Module.submitForm);
-        dom.formLancamentoMensal.addEventListener('submit', financeiroModule.submitForm);
-        dom.btnDataHoje.addEventListener('click', () => dom.dataEntregaInput.value = new Date().toISOString().split('T')[0]);
-        dom.valorUnidadeInput.addEventListener('input', pedidosModule.handleInputMask);
-        dom.quantidadePedidaInput.addEventListener('input', pedidosModule.handleInputMask);
-        dom.valor043Input.addEventListener('input', pedidosModule.handleInputMask);
-        document.querySelectorAll('.mensal-value-input').forEach(input => input.addEventListener('input', pedidosModule.handleInputMask));
-        dom.btnSearch.addEventListener('click', () => pedidosModule.searchPedidos());
-        dom.resultsContainer.addEventListener('click', pedidosModule.handleTableClick);
-        dom.resultsContainer.addEventListener('change', pedidosModule.handleCheckboxChange);
-        dom.btnGenerateReport.addEventListener('click', pedidosModule.generateReport);
-        dom.btnExportExcel.addEventListener('click', pedidosModule.exportExcel);
-        dom.btnShowNaoEntregues.addEventListener('click', () => pedidosModule.searchPedidos(true));
-        dom.btnSearch043.addEventListener('click', controle043Module.searchLancamentos);
-        dom.results043Div.addEventListener('click', controle043Module.handleResultsClick);
-        dom.btnGenerateReport043.addEventListener('click', controle043Module.generateReport);
-        dom.btnExportExcel043.addEventListener('click', controle043Module.exportExcel);
-        dom.btnGenerateRelatorioMensal.addEventListener('click', financeiroModule.generateRelatorio);
-        dom.btnExportExcelMensal.addEventListener('click', financeiroModule.exportExcel);
-        dom.btnSearchMensal.addEventListener('click', financeiroModule.searchLancamentos);
-        dom.consultaMensalResultadosDiv.addEventListener('click', financeiroModule.handleConsultaClick);
-        dom.formProdutoAdd.addEventListener('submit', (e) => { e.preventDefault(); camposModule.addCampo(state.produtos, document.getElementById('input-produto-add')); });
-        dom.formMarcaAdd.addEventListener('submit', (e) => { e.preventDefault(); camposModule.addCampo(state.marcas, document.getElementById('input-marca-add')); });
-        dom.formFornecedorAdd.addEventListener('submit', (e) => { e.preventDefault(); camposModule.addCampo(state.fornecedores, document.getElementById('input-fornecedor-add')); });
-        dom.listaProdutosCampos.addEventListener('click', camposModule.handleCamposClick);
-        dom.listaMarcasCampos.addEventListener('click', camposModule.handleCamposClick);
-        dom.listaFornecedoresCampos.addEventListener('click', camposModule.handleCamposClick);
-        
-        // Eventos para a nova seção de backup
-        if (dom.btnExportBackup) dom.btnExportBackup.addEventListener('click', backupModule.exportData);
-        if (dom.btnImportBackup) {
-            dom.btnImportBackup.addEventListener('click', () => {
-                dom.importFileInput.click();
-            });
-            dom.importFileInput.addEventListener('change', backupModule.importData);
-        }
-    };
+                    <section id="cadastrar-pedido" class="tab-content active" role="tabpanel" aria-labelledby="cadastrar-pedido-tab">
+                        <h2 id="cadastrar-pedido-title">Cadastrar Novo Pedido</h2>
+                        <form id="form-pedido">
+                            <div class="form-group">
+                                <label for="data-pedido">Data do Pedido:</label>
+                                <input type="date" id="data-pedido" name="data-pedido" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loja">Loja:</label>
+                                <select id="loja" name="loja" required>
+                                    <option value="">Selecione a Loja</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="nome-produto">Nome do Produto:</label>
+                                <input type="text" id="nome-produto" name="nome-produto" list="produtos-list" required>
+                                <datalist id="produtos-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="marca-produto">Marca do Produto:</label>
+                                <input type="text" id="marca-produto" name="marca-produto" list="marcas-list" required>
+                                <datalist id="marcas-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="fornecedor">Fornecedor:</label>
+                                <input type="text" id="fornecedor" name="fornecedor" list="fornecedores-list" required>
+                                <datalist id="fornecedores-list"></datalist>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-unidade">Valor da Unidade:</label>
+                                <input type="text" id="valor-unidade" name="valor-unidade" placeholder="R$ 0,00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="medida-unidade">Medida da Unidade:</label>
+                                <select id="medida-unidade" name="medida-unidade" required>
+                                    <option value="">Selecione a Medida</option>
+                                    <option value="Kg">Kg</option>
+                                    <option value="L">L</option>
+                                    <option value="Fardo">Fardo</option>
+                                    <option value="Caixa">Caixa</option>
+                                    <option value="Bisnaga">Bisnaga</option>
+                                    <option value="Lata">Lata</option>
+                                    <option value="Unidade">Unidade</option>
+                                    <option value="Manta">Manta</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade-pedida">Quantidade Pedida:</label>
+                                <input type="text" id="quantidade-pedida" name="quantidade-pedida" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-total">Valor Total:</label>
+                                <input type="text" id="valor-total" name="valor-total" placeholder="R$ 0,00" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="data-entrega">Data da Entrega:</label>
+                                <div class="input-with-button">
+                                    <input type="date" id="data-entrega" name="data-entrega">
+                                    <button type="button" id="btn-data-hoje">Hoje</button>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-submit">Cadastrar Pedido</button>
+                        </form>
+                    </section>
 
-    // 7. Inicialização
-    const init = () => {
-        setupEventListeners();
-        tabManager.showMainMenu();
-        pedidosModule.updateDatalists();
-    };
-    init();
+                    <section id="consultar-pedidos" class="tab-content" role="tabpanel" aria-labelledby="consultar-pedidos-tab">
+                        <h2 id="consultar-pedidos-title">Consultar Pedidos</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="search-data-inicio">Data de Início:</label>
+                                <input type="date" id="search-data-inicio" class="search-input">
+                                <label for="search-data-fim">Data de Fim:</label>
+                                <input type="date" id="search-data-fim" class="search-input">
+                                <label for="search-loja">Loja:</label>
+                                <select id="search-loja" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="search-produto">Nome do Produto:</label>
+                                <input type="text" id="search-produto" class="search-input" placeholder="Nome do Produto">
+                                <label for="search-marca">Marca do Produto:</label>
+                                <input type="text" id="search-marca" class="search-input" placeholder="Marca do Produto">
+                                <label for="search-fornecedor">Fornecedor:</label>
+                                <input type="text" id="search-fornecedor" class="search-input" placeholder="Fornecedor">
+                            </div>
+                            <div class="search-buttons-group">
+                                <button id="btn-search" class="btn-search">Pesquisar</button>
+                                <button id="btn-show-nao-entregues" class="btn-action">Pedidos Não Entregues</button>
+                            </div>
+                        </div>
+                        <div class="results-container" role="region" aria-live="polite">
+                            <p id="total-results"></p>
+                            <div class="table-container">
+                                <table id="tabela-pedidos">
+                                    <thead class="table-header">
+                                        <tr>
+                                            <th><input type="checkbox" id="select-all-checkbox" aria-label="Selecionar todos os pedidos"></th>
+                                            <th class="col-data">Data</th>
+                                            <th>Loja</th>
+                                            <th>Produto</th>
+                                            <th>Marca</th>
+                                            <th>Fornecedor</th>
+                                            <th>Valor Unidade</th>
+                                            <th>Medida</th>
+                                            <th>Qtd Pedida</th>
+                                            <th>Valor Total</th>
+                                            <th class="col-data">Entrega</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="summary-block">
+                            <h4>Totais dos Itens Selecionados</h4>
+                            <p>Valor Unidade Total: <span id="total-valor-unidade">0</span></p>
+                            <p>Quantidade Pedida Total: <span id="total-quantidade-pedida">0</span></p>
+                            <p>Valor Total: <span id="total-valor-total">0</span></p>
+                        </div>
+                    </section>
 
-});
+                    <section id="gerar-relatorio" class="tab-content" role="tabpanel" aria-labelledby="gerar-relatorio-tab">
+                        <h2 id="gerar-relatorio-title">Gerar Relatório</h2>
+                        <div class="report-options">
+                            <label for="report-type">Tipo de Relatório:</label>
+                            <select id="report-type">
+                                <option value="mensal-geral">Mensal de Pedidos</option>
+                                <option value="por-produto">Por Nome do Produto</option>
+                                <option value="por-marca">Por Marca do Produto</option>
+                                <option value="por-fornecedor">Por Fornecedor</option>
+                            </select>
+                        </div>
+                        <div class="search-container report-search-container">
+                            <div class="search-fields">
+                                <label for="report-search-produto">Nome do Produto:</label>
+                                <input type="text" id="report-search-produto" class="search-input" placeholder="Nome do Produto">
+                                <label for="report-search-marca">Marca do Produto:</label>
+                                <input type="text" id="report-search-marca" class="search-input" placeholder="Marca do Produto">
+                                <label for="report-search-fornecedor">Fornecedor:</label>
+                                <input type="text" id="report-search-fornecedor" class="search-input" placeholder="Fornecedor">
+                            </div>
+                        </div>
+                        <button id="btn-generate-report" class="btn-generate">Gerar Relatório</button>
+                        <div id="report-results" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel" style="display: none;">Exportar para Excel</button>
+                    </section>
+                    
+                    <section id="cadastrar-campos-section" class="tab-content" role="tabpanel" aria-labelledby="cadastrar-campos-tab">
+                        <h2 id="cadastrar-campos-title">Cadastrar Campos</h2>
+                        <div class="campos-container">
+                            <div class="campos-group">
+                                <h3>Produtos</h3>
+                                <form id="form-produto-add">
+                                    <label for="input-produto-add" class="sr-only">Adicionar novo produto:</label>
+                                    <input type="text" id="input-produto-add" placeholder="Novo produto" required>
+                                    <button type="submit" class="btn-add">Adicionar</button>
+                                </form>
+                                <ul id="lista-produtos-campos" aria-label="Lista de produtos cadastrados"></ul>
+                            </div>
+                            <div class="campos-group">
+                                <h3>Marcas</h3>
+                                <form id="form-marca-add">
+                                    <label for="input-marca-add" class="sr-only">Adicionar nova marca:</label>
+                                    <input type="text" id="input-marca-add" placeholder="Nova marca" required>
+                                    <button type="submit" class="btn-add">Adicionar</button>
+                                </form>
+                                <ul id="lista-marcas-campos" aria-label="Lista de marcas cadastradas"></ul>
+                            </div>
+                            <div class="campos-group">
+                                <h3>Fornecedores</h3>
+                                <form id="form-fornecedor-add">
+                                    <label for="input-fornecedor-add" class="sr-only">Adicionar novo fornecedor:</label>
+                                    <input type="text" id="input-fornecedor-add" placeholder="Novo fornecedor" required>
+                                    <button type="submit" class="btn-add">Adicionar</button>
+                                </form>
+                                <ul id="lista-fornecedores-campos" aria-label="Lista de fornecedores cadastrados"></ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="controle-043-container" class="main-tab-content" role="tabpanel" aria-labelledby="controle-043-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação do Controle 043">
+                    <button class="nav-button sub-tab-button active" data-target="inclusao-043" aria-controls="inclusao-043" aria-selected="true" role="tab">Inclusão</button>
+                    <button class="nav-button sub-tab-button" data-target="consulta-043" aria-controls="consulta-043" aria-selected="false" role="tab">Consulta</button>
+                    <button class="nav-button sub-tab-button" data-target="relatorio-043" aria-controls="relatorio-043" aria-selected="false" role="tab">Relatório</button>
+                </aside>
+                <div class="sub-content">
+                    
+                    <section id="inclusao-043" class="tab-content active" role="tabpanel" aria-labelledby="inclusao-043-tab">
+                        <h2 id="inclusao-043-title">Inclusão de Crédito e Débito</h2>
+                        <form id="form-043">
+                            <div class="form-group">
+                                <label for="data-043">Data:</label>
+                                <input type="date" id="data-043" name="data-043" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loja-043">Selecionar Loja:</label>
+                                <select id="loja-043" name="loja-043" required>
+                                    <option value="">Selecione a Loja</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo-lancamento">Tipo de Lançamento:</label>
+                                <select id="tipo-lancamento" name="tipo-lancamento" required>
+                                    <option value="Debito">Débito</option>
+                                    <option value="Credito">Crédito</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="valor-043">Valor:</label>
+                                <input type="text" id="valor-043" name="valor-043" placeholder="0,00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="descricao-043">Descrição (opcional):</label>
+                                <textarea id="descricao-043" name="descricao-043" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">Incluir</button>
+                        </form>
+                    </section>
+                    
+                    <section id="consulta-043" class="tab-content" role="tabpanel" aria-labelledby="consulta-043-tab">
+                        <h2 id="consulta-043-title">Consulta de Lançamentos</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="filtro-consulta-043">Filtrar por:</label>
+                                <select id="filtro-consulta-043" class="search-input">
+                                    <option value="detalhado">Detalhado</option>
+                                    <option value="sintetico">Sintético</option>
+                                </select>
+                                <label for="search-loja-043">Loja:</label>
+                                <select id="search-loja-043" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="search-data-043">Data:</label>
+                                <input type="date" id="search-data-043" class="search-input" placeholder="Data">
+                                <label for="search-mes-043">Mês:</label>
+                                <select id="search-mes-043" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <label for="search-ano-043">Ano:</label>
+                                <select id="search-ano-043" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="search-tipo-043">Tipo:</label>
+                                <select id="search-tipo-043" class="search-input">
+                                    <option value="">Crédito e Débito</option>
+                                    <option value="Credito">Crédito</option>
+                                    <option value="Debito">Débito</option>
+                                </select>
+                            </div>
+                            <button id="btn-search-043" class="btn-search">Consultar</button>
+                        </div>
+                        <div id="results-043" role="region" aria-live="polite"></div>
+                    </section>
+
+                    <section id="relatorio-043" class="tab-content" role="tabpanel" aria-labelledby="relatorio-043-tab">
+                        <h2 id="relatorio-043-title">Relatório de Lançamentos</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="relatorio-tipo-043">Tipo de Relatório:</label>
+                                <select id="relatorio-tipo-043" class="search-input">
+                                    <option value="detalhado-completo">Detalhado</option>
+                                    <option value="soma-total">Soma Total (Créditos - Débitos)</option>
+                                </select>
+                                <label for="report-search-loja-043">Loja:</label>
+                                <select id="report-search-loja-043" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="report-search-data-043">Data:</label>
+                                <input type="date" id="report-search-data-043" class="search-input" placeholder="Data">
+                                <label for="report-search-mes-043">Mês:</label>
+                                <select id="report-search-mes-043" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                                <label for="report-search-ano-043">Ano:</label>
+                                <select id="report-search-ano-043" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="report-search-tipo-043">Tipo:</label>
+                                <select id="report-search-tipo-043" class="search-input">
+                                    <option value="">Crédito e Débito</option>
+                                    <option value="Credito">Crédito</option>
+                                    <option value="Debito">Débito</option>
+                                </select>
+                            </div>
+                            <button id="btn-generate-report-043" class="btn-generate">Gerar Relatório</button>
+                        </div>
+                        <div id="report-results-043" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel-043" style="display: none;">Exportar para Excel</button>
+                    </section>
+                </div>
+            </div>
+
+            <div id="financeiro-container" class="main-tab-content" role="tabpanel" aria-labelledby="financeiro-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação Financeira">
+                    <button class="nav-button sub-tab-button active" data-target="lancamento-mensal" aria-controls="lancamento-mensal" aria-selected="true" role="tab">Lançamento</button>
+                    <button class="nav-button sub-tab-button" data-target="consulta-mensal" aria-controls="consulta-mensal" aria-selected="false" role="tab">Consulta</button>
+                    <button class="nav-button sub-tab-button" data-target="relatorio-mensal" aria-controls="relatorio-mensal" aria-selected="false" role="tab">Relatório</button>
+                </aside>
+                <div class="sub-content">
+                    <section id="lancamento-mensal" class="tab-content active" role="tabpanel" aria-labelledby="lancamento-mensal-tab">
+                        <h2 id="lancamento-mensal-title">Lançamento Mensal</h2>
+                        <form id="form-lancamento-mensal">
+                            <div class="form-group">
+                                <label for="loja-mensal">Loja:</label>
+                                <select id="loja-mensal" name="loja-mensal" required>
+                                    <option value="">Selecione a Loja</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ano-mensal">Ano:</label>
+                                <select id="ano-mensal" name="ano-mensal" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mes-mensal">Mês:</label>
+                                <select id="mes-mensal" name="mes-mensal" required>
+                                    <option value="">Selecione o Mês</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="caixa-economica">Caixa Econômica:</label>
+                                <input type="text" id="caixa-economica" name="caixa-economica" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cofre">Cofre:</label>
+                                <input type="text" id="cofre" name="cofre" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="loteria">Loteria:</label>
+                                <input type="text" id="loteria" name="loteria" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pagbankh">PagBank H:</label>
+                                <input type="text" id="pagbankh" name="pagbankh" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="pagbankd">PagBank D:</label>
+                                <input type="text" id="pagbankd" name="pagbankd" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="investimento">Investimento:</label>
+                                <input type="text" id="investimento" name="investimento" class="mensal-value-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lucro-mes">Lucro Mês:</label>
+                                <input type="text" id="lucro-mes" name="lucro-mes" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="total-mensal">Total:</label>
+                                <input type="text" id="total-mensal" name="total-mensal" readonly>
+                            </div>
+                            <button type="submit" class="btn-submit">Lançar Mês</button>
+                        </form>
+                    </section>
+                    
+                    <section id="relatorio-mensal" class="tab-content" role="tabpanel" aria-labelledby="relatorio-mensal-tab">
+                        <h2 id="relatorio-mensal-title">Relatório Mensal</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="rel-loja-mensal">Loja:</label>
+                                <select id="rel-loja-mensal" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="rel-ano-mensal">Ano:</label>
+                                <select id="rel-ano-mensal" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="rel-mes-mensal">Mês:</label>
+                                <select id="rel-mes-mensal" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <button id="btn-generate-relatorio-mensal" class="btn-generate">Gerar Relatório</button>
+                        </div>
+                        <div id="relatorio-mensal-resultados" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel-mensal" style="display: none;">Exportar para Excel</button>
+                    </section>
+                    
+                    <section id="consulta-mensal" class="tab-content" role="tabpanel" aria-labelledby="consulta-mensal-tab">
+                        <h2 id="consulta-mensal-title">Consulta de Lançamentos Mensais</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <label for="cons-loja-mensal">Loja:</label>
+                                <select id="cons-loja-mensal" class="search-input">
+                                    <option value="">Todas as Lojas</option>
+                                    <option value="Hero Joquei">Hero Joquei</option>
+                                    <option value="Hero Shopping">Hero Shopping</option>
+                                    <option value="Hero Centro">Hero Centro</option>
+                                </select>
+                                <label for="cons-ano-mensal">Ano:</label>
+                                <select id="cons-ano-mensal" class="search-input">
+                                    <option value="">Todos os Anos</option>
+                                </select>
+                                <label for="cons-mes-mensal">Mês:</label>
+                                <select id="cons-mes-mensal" class="search-input">
+                                    <option value="">Todos os Meses</option>
+                                    <option value="01">Janeiro</option>
+                                    <option value="02">Fevereiro</option>
+                                    <option value="03">Março</option>
+                                    <option value="04">Abril</option>
+                                    <option value="05">Maio</option>
+                                    <option value="06">Junho</option>
+                                    <option value="07">Julho</option>
+                                    <option value="08">Agosto</option>
+                                    <option value="09">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <button id="btn-search-mensal" class="btn-search">Consultar</button>
+                        </div>
+                        <div id="consulta-mensal-resultados" role="region" aria-live="polite"></div>
+                    </section>
+                </div>
+            </div>
+
+            <div id="backup-container" class="main-tab-content" role="tabpanel" aria-labelledby="backup-container-tab">
+                <div class="sub-content backup-content">
+                    <section id="backup-restore-section" class="tab-content active" role="tabpanel" aria-labelledby="backup-restore-title">
+                        <h2 id="backup-restore-title">Backup e Restauração de Dados</h2>
+                        <div class="backup-options-container">
+                            <div class="backup-option">
+                                <h3>Exportar Dados (Backup)</h3>
+                                <p>Crie uma cópia de segurança de todos os dados do sistema em um arquivo JSON.</p>
+                                <button id="btn-export-backup" class="btn-submit">Fazer Backup dos Dados</button>
+                            </div>
+                            <div class="backup-option">
+                                <h3>Importar Dados (Restauração)</h3>
+                                <p>Carregue um arquivo JSON de backup para restaurar os dados do sistema. **Atenção: Isso substituirá os dados atuais.**</p>
+                                <input type="file" id="import-file-input" accept=".json" style="display:none;">
+                                <button id="btn-import-backup" class="btn-submit">Importar Dados</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>
