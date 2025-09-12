@@ -429,6 +429,12 @@ table tr:last-child td {
     color: var(--cinza-escuro);
 }
 
+/* Nova classe para alinhar os botões de busca */
+.search-buttons-group {
+    display: flex;
+    gap: 1rem;
+}
+
 /* A partir daqui, as regras se aplicam apenas a telas maiores que 768px */
 @media (min-width: 769px) {
     .app-container {
