@@ -18,12 +18,13 @@
             <button class="nav-button main-tab-button active" data-target="pedidos-container" aria-label="Acessar Pedidos">Pedidos</button>
             <button class="nav-button main-tab-button" data-target="controle-043-container" aria-label="Acessar Controle 043">Controle 043</button>
             <button class="nav-button main-tab-button" data-target="financeiro-container" aria-label="Acessar Financeiro">Financeiro</button>
+            <button class="nav-button main-tab-button" data-target="praia-container" aria-label="Acessar Aba Praia">Praia</button>
             <button class="nav-button main-tab-button" data-target="backup-container" aria-label="Acessar Backup e Restauração">Backup</button>
         </aside>
 
         <main class="content" aria-label="Conteúdo principal do sistema">
             
-            <div id="pedidos-container" class="main-tab-content" role="tabpanel" aria-labelledby="pedidos-container-tab">
+            <div id="pedidos-container" class="main-tab-content active" role="tabpanel" aria-labelledby="pedidos-container-tab">
                 <aside class="sub-sidebar" aria-label="Navegação de Pedidos">
                     <button class="nav-button sub-tab-button active" data-target="cadastrar-pedido" aria-controls="cadastrar-pedido" aria-selected="true" role="tab">Cadastrar</button>
                     <button class="nav-button sub-tab-button" data-target="consultar-pedidos" aria-controls="consultar-pedidos" aria-selected="false" role="tab">Consulta</button>
@@ -35,68 +36,72 @@
                     <section id="cadastrar-pedido" class="tab-content active" role="tabpanel" aria-labelledby="cadastrar-pedido-tab">
                         <h2 id="cadastrar-pedido-title">Cadastrar Novo Pedido</h2>
                         <form id="form-pedido">
-                            <div class="form-group">
-                                <label for="data-pedido">Data do Pedido:</label>
-                                <input type="date" id="data-pedido" name="data-pedido" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="loja">Loja:</label>
-                                <select id="loja" name="loja" required>
-                                    <option value="">Selecione a Loja</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="nome-produto">Nome do Produto:</label>
-                                <input type="text" id="nome-produto" name="nome-produto" list="produtos-list" required>
-                                <datalist id="produtos-list"></datalist>
-                            </div>
-                            <div class="form-group">
-                                <label for="marca-produto">Marca do Produto:</label>
-                                <input type="text" id="marca-produto" name="marca-produto" list="marcas-list" required>
-                                <datalist id="marcas-list"></datalist>
-                            </div>
-                            <div class="form-group">
-                                <label for="fornecedor">Fornecedor:</label>
-                                <input type="text" id="fornecedor" name="fornecedor" list="fornecedores-list" required>
-                                <datalist id="fornecedores-list"></datalist>
-                            </div>
-                            <div class="form-group">
-                                <label for="valor-unidade">Valor da Unidade:</label>
-                                <input type="text" id="valor-unidade" name="valor-unidade" placeholder="R$ 0,00" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="medida-unidade">Medida da Unidade:</label>
-                                <select id="medida-unidade" name="medida-unidade" required>
-                                    <option value="">Selecione a Medida</option>
-                                    <option value="Kg">Kg</option>
-                                    <option value="L">L</option>
-                                    <option value="Fardo">Fardo</option>
-                                    <option value="Caixa">Caixa</option>
-                                    <option value="Bisnaga">Bisnaga</option>
-                                    <option value="Lata">Lata</option>
-                                    <option value="Unidade">Unidade</option>
-                                    <option value="Manta">Manta</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="quantidade-pedida">Quantidade Pedida:</label>
-                                <input type="text" id="quantidade-pedida" name="quantidade-pedida" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="valor-total">Valor Total:</label>
-                                <input type="text" id="valor-total" name="valor-total" placeholder="R$ 0,00" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="data-entrega">Data da Entrega:</label>
-                                <div class="input-with-button">
-                                    <input type="date" id="data-entrega" name="data-entrega">
-                                    <button type="button" id="btn-data-hoje">Hoje</button>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="data-pedido">Data do Pedido:</label>
+                                    <input type="date" id="data-pedido" name="data-pedido" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loja">Loja:</label>
+                                    <select id="loja" name="loja" required>
+                                        <option value="">Selecione a Loja</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nome-produto">Nome do Produto:</label>
+                                    <input type="text" id="nome-produto" name="nome-produto" list="produtos-list" required>
+                                    <datalist id="produtos-list"></datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label for="marca-produto">Marca do Produto:</label>
+                                    <input type="text" id="marca-produto" name="marca-produto" list="marcas-list" required>
+                                    <datalist id="marcas-list"></datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fornecedor">Fornecedor:</label>
+                                    <input type="text" id="fornecedor" name="fornecedor" list="fornecedores-list" required>
+                                    <datalist id="fornecedores-list"></datalist>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valor-unidade">Valor da Unidade:</label>
+                                    <input type="text" id="valor-unidade" name="valor-unidade" placeholder="R$ 0,00" required>
                                 </div>
                             </div>
-                            <button type="submit" class="btn-submit">Cadastrar Pedido</button>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="medida-unidade">Medida da Unidade:</label>
+                                    <select id="medida-unidade" name="medida-unidade" required>
+                                        <option value="">Selecione a Medida</option>
+                                        <option value="Kg">Kg</option>
+                                        <option value="L">L</option>
+                                        <option value="Fardo">Fardo</option>
+                                        <option value="Caixa">Caixa</option>
+                                        <option value="Bisnaga">Bisnaga</option>
+                                        <option value="Lata">Lata</option>
+                                        <option value="Unidade">Unidade</option>
+                                        <option value="Manta">Manta</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantidade-pedida">Quantidade Pedida:</label>
+                                    <input type="text" id="quantidade-pedida" name="quantidade-pedida" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valor-total">Valor Total:</label>
+                                    <input type="text" id="valor-total" name="valor-total" placeholder="R$ 0,00" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="data-entrega">Data da Entrega:</label>
+                                    <div class="input-with-button">
+                                        <input type="date" id="data-entrega" name="data-entrega">
+                                        <button type="button" id="btn-data-hoje">Hoje</button>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn-submit">Cadastrar Pedido</button>
+                            </div>
                         </form>
                     </section>
 
@@ -104,23 +109,35 @@
                         <h2 id="consultar-pedidos-title">Consultar Pedidos</h2>
                         <div class="search-container">
                             <div class="search-fields">
-                                <label for="search-data-inicio">Data de Início:</label>
-                                <input type="date" id="search-data-inicio" class="search-input">
-                                <label for="search-data-fim">Data de Fim:</label>
-                                <input type="date" id="search-data-fim" class="search-input">
-                                <label for="search-loja">Loja:</label>
-                                <select id="search-loja" class="search-input">
-                                    <option value="">Todas as Lojas</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                                <label for="search-produto">Nome do Produto:</label>
-                                <input type="text" id="search-produto" class="search-input" placeholder="Nome do Produto">
-                                <label for="search-marca">Marca do Produto:</label>
-                                <input type="text" id="search-marca" class="search-input" placeholder="Marca do Produto">
-                                <label for="search-fornecedor">Fornecedor:</label>
-                                <input type="text" id="search-fornecedor" class="search-input" placeholder="Fornecedor">
+                                <div class="search-group">
+                                    <label for="search-data-inicio">Data de Início:</label>
+                                    <input type="date" id="search-data-inicio" class="search-input">
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-data-fim">Data de Fim:</label>
+                                    <input type="date" id="search-data-fim" class="search-input">
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-loja">Loja:</label>
+                                    <select id="search-loja" class="search-input">
+                                        <option value="">Todas as Lojas</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-produto">Nome do Produto:</label>
+                                    <input type="text" id="search-produto" class="search-input" placeholder="Nome do Produto">
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-marca">Marca do Produto:</label>
+                                    <input type="text" id="search-marca" class="search-input" placeholder="Marca do Produto">
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-fornecedor">Fornecedor:</label>
+                                    <input type="text" id="search-fornecedor" class="search-input" placeholder="Fornecedor">
+                                </div>
                             </div>
                             <div class="search-buttons-group">
                                 <button id="btn-search" class="btn-search">Pesquisar</button>
@@ -162,26 +179,32 @@
 
                     <section id="gerar-relatorio" class="tab-content" role="tabpanel" aria-labelledby="gerar-relatorio-tab">
                         <h2 id="gerar-relatorio-title">Gerar Relatório</h2>
-                        <div class="report-options">
-                            <label for="report-type">Tipo de Relatório:</label>
-                            <select id="report-type">
-                                <option value="mensal-geral">Mensal de Pedidos</option>
-                                <option value="por-produto">Por Nome do Produto</option>
-                                <option value="por-marca">Por Marca do Produto</option>
-                                <option value="por-fornecedor">Por Fornecedor</option>
-                            </select>
-                        </div>
                         <div class="search-container report-search-container">
                             <div class="search-fields">
-                                <label for="report-search-produto">Nome do Produto:</label>
-                                <input type="text" id="report-search-produto" class="search-input" placeholder="Nome do Produto">
-                                <label for="report-search-marca">Marca do Produto:</label>
-                                <input type="text" id="report-search-marca" class="search-input" placeholder="Marca do Produto">
-                                <label for="report-search-fornecedor">Fornecedor:</label>
-                                <input type="text" id="report-search-fornecedor" class="search-input" placeholder="Fornecedor">
+                                <div class="search-group">
+                                    <label for="report-type">Tipo de Relatório:</label>
+                                    <select id="report-type" class="search-input">
+                                        <option value="mensal-geral">Mensal de Pedidos</option>
+                                        <option value="por-produto">Por Nome do Produto</option>
+                                        <option value="por-marca">Por Marca do Produto</option>
+                                        <option value="por-fornecedor">Por Fornecedor</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-produto">Nome do Produto:</label>
+                                    <input type="text" id="report-search-produto" class="search-input" placeholder="Nome do Produto">
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-marca">Marca do Produto:</label>
+                                    <input type="text" id="report-search-marca" class="search-input" placeholder="Marca do Produto">
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-fornecedor">Fornecedor:</label>
+                                    <input type="text" id="report-search-fornecedor" class="search-input" placeholder="Fornecedor">
+                                </div>
                             </div>
+                            <button id="btn-generate-report" class="btn-generate">Gerar Relatório</button>
                         </div>
-                        <button id="btn-generate-report" class="btn-generate">Gerar Relatório</button>
                         <div id="report-results" role="region" aria-live="polite"></div>
                         <button id="btn-export-excel" style="display: none;">Exportar para Excel</button>
                     </section>
@@ -191,27 +214,33 @@
                         <div class="campos-container">
                             <div class="campos-group">
                                 <h3>Produtos</h3>
-                                <form id="form-produto-add">
-                                    <label for="input-produto-add" class="sr-only">Adicionar novo produto:</label>
-                                    <input type="text" id="input-produto-add" placeholder="Novo produto" required>
+                                <form id="form-produto-add" class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-produto-add" class="sr-only">Adicionar novo produto:</label>
+                                        <input type="text" id="input-produto-add" placeholder="Novo produto" required>
+                                    </div>
                                     <button type="submit" class="btn-add">Adicionar</button>
                                 </form>
                                 <ul id="lista-produtos-campos" aria-label="Lista de produtos cadastrados"></ul>
                             </div>
                             <div class="campos-group">
                                 <h3>Marcas</h3>
-                                <form id="form-marca-add">
-                                    <label for="input-marca-add" class="sr-only">Adicionar nova marca:</label>
-                                    <input type="text" id="input-marca-add" placeholder="Nova marca" required>
+                                <form id="form-marca-add" class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-marca-add" class="sr-only">Adicionar nova marca:</label>
+                                        <input type="text" id="input-marca-add" placeholder="Nova marca" required>
+                                    </div>
                                     <button type="submit" class="btn-add">Adicionar</button>
                                 </form>
                                 <ul id="lista-marcas-campos" aria-label="Lista de marcas cadastradas"></ul>
                             </div>
                             <div class="campos-group">
                                 <h3>Fornecedores</h3>
-                                <form id="form-fornecedor-add">
-                                    <label for="input-fornecedor-add" class="sr-only">Adicionar novo fornecedor:</label>
-                                    <input type="text" id="input-fornecedor-add" placeholder="Novo fornecedor" required>
+                                <form id="form-fornecedor-add" class="form-row">
+                                    <div class="form-group">
+                                        <label for="input-fornecedor-add" class="sr-only">Adicionar novo fornecedor:</label>
+                                        <input type="text" id="input-fornecedor-add" placeholder="Novo fornecedor" required>
+                                    </div>
                                     <button type="submit" class="btn-add">Adicionar</button>
                                 </form>
                                 <ul id="lista-fornecedores-campos" aria-label="Lista de fornecedores cadastrados"></ul>
@@ -232,35 +261,37 @@
                     <section id="inclusao-043" class="tab-content active" role="tabpanel" aria-labelledby="inclusao-043-tab">
                         <h2 id="inclusao-043-title">Inclusão de Crédito e Débito</h2>
                         <form id="form-043">
-                            <div class="form-group">
-                                <label for="data-043">Data:</label>
-                                <input type="date" id="data-043" name="data-043" required>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="data-043">Data:</label>
+                                    <input type="date" id="data-043" name="data-043" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loja-043">Selecionar Loja:</label>
+                                    <select id="loja-043" name="loja-043" required>
+                                        <option value="">Selecione a Loja</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo-lancamento">Tipo de Lançamento:</label>
+                                    <select id="tipo-lancamento" name="tipo-lancamento" required>
+                                        <option value="Debito">Débito</option>
+                                        <option value="Credito">Crédito</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="valor-043">Valor:</label>
+                                    <input type="text" id="valor-043" name="valor-043" placeholder="0,00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="descricao-043">Descrição (opcional):</label>
+                                    <textarea id="descricao-043" name="descricao-043" rows="3"></textarea>
+                                </div>
+                                <button type="submit" class="btn-submit">Incluir</button>
                             </div>
-                            <div class="form-group">
-                                <label for="loja-043">Selecionar Loja:</label>
-                                <select id="loja-043" name="loja-043" required>
-                                    <option value="">Selecione a Loja</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="tipo-lancamento">Tipo de Lançamento:</label>
-                                <select id="tipo-lancamento" name="tipo-lancamento" required>
-                                    <option value="Debito">Débito</option>
-                                    <option value="Credito">Crédito</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="valor-043">Valor:</label>
-                                <input type="text" id="valor-043" name="valor-043" placeholder="0,00" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="descricao-043">Descrição (opcional):</label>
-                                <textarea id="descricao-043" name="descricao-043" rows="3"></textarea>
-                            </div>
-                            <button type="submit" class="btn-submit">Incluir</button>
                         </form>
                     </section>
                     
@@ -268,46 +299,58 @@
                         <h2 id="consulta-043-title">Consulta de Lançamentos</h2>
                         <div class="search-container">
                             <div class="search-fields">
-                                <label for="filtro-consulta-043">Filtrar por:</label>
-                                <select id="filtro-consulta-043" class="search-input">
-                                    <option value="detalhado">Detalhado</option>
-                                    <option value="sintetico">Sintético</option>
-                                </select>
-                                <label for="search-loja-043">Loja:</label>
-                                <select id="search-loja-043" class="search-input">
-                                    <option value="">Todas as Lojas</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                                <label for="search-data-043">Data:</label>
-                                <input type="date" id="search-data-043" class="search-input" placeholder="Data">
-                                <label for="search-mes-043">Mês:</label>
-                                <select id="search-mes-043" class="search-input">
-                                    <option value="">Todos os Meses</option>
-                                    <option value="01">Janeiro</option>
-                                    <option value="02">Fevereiro</option>
-                                    <option value="03">Março</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Maio</option>
-                                    <option value="06">Junho</option>
-                                    <option value="07">Julho</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Setembro</option>
-                                    <option value="10">Outubro</option>
-                                    <option value="11">Novembro</option>
-                                    <option value="12">Dezembro</option>
-                                </select>
-                                <label for="search-ano-043">Ano:</label>
-                                <select id="search-ano-043" class="search-input">
-                                    <option value="">Todos os Anos</option>
-                                </select>
-                                <label for="search-tipo-043">Tipo:</label>
-                                <select id="search-tipo-043" class="search-input">
-                                    <option value="">Crédito e Débito</option>
-                                    <option value="Credito">Crédito</option>
-                                    <option value="Debito">Débito</option>
-                                </select>
+                                <div class="search-group">
+                                    <label for="filtro-consulta-043">Filtrar por:</label>
+                                    <select id="filtro-consulta-043" class="search-input">
+                                        <option value="detalhado">Detalhado</option>
+                                        <option value="sintetico">Sintético</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-loja-043">Loja:</label>
+                                    <select id="search-loja-043" class="search-input">
+                                        <option value="">Todas as Lojas</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-data-043">Data:</label>
+                                    <input type="date" id="search-data-043" class="search-input" placeholder="Data">
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-mes-043">Mês:</label>
+                                    <select id="search-mes-043" class="search-input">
+                                        <option value="">Todos os Meses</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-ano-043">Ano:</label>
+                                    <select id="search-ano-043" class="search-input">
+                                        <option value="">Todos os Anos</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="search-tipo-043">Tipo:</label>
+                                    <select id="search-tipo-043" class="search-input">
+                                        <option value="">Crédito e Débito</option>
+                                        <option value="Credito">Crédito</option>
+                                        <option value="Debito">Débito</option>
+                                    </select>
+                                </div>
                             </div>
                             <button id="btn-search-043" class="btn-search">Consultar</button>
                         </div>
@@ -318,46 +361,58 @@
                         <h2 id="relatorio-043-title">Relatório de Lançamentos</h2>
                         <div class="search-container">
                             <div class="search-fields">
-                                <label for="relatorio-tipo-043">Tipo de Relatório:</label>
-                                <select id="relatorio-tipo-043" class="search-input">
-                                    <option value="detalhado-completo">Detalhado</option>
-                                    <option value="soma-total">Soma Total (Créditos - Débitos)</option>
-                                </select>
-                                <label for="report-search-loja-043">Loja:</label>
-                                <select id="report-search-loja-043" class="search-input">
-                                    <option value="">Todas as Lojas</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                                <label for="report-search-data-043">Data:</label>
-                                <input type="date" id="report-search-data-043" class="search-input" placeholder="Data">
-                                <label for="report-search-mes-043">Mês:</label>
-                                <select id="report-search-mes-043" class="search-input">
-                                    <option value="">Todos os Meses</option>
-                                    <option value="01">Janeiro</option>
-                                    <option value="02">Fevereiro</option>
-                                    <option value="03">Março</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Maio</option>
-                                    <option value="06">Junho</option>
-                                    <option value="07">Julho</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Setembro</option>
-                                    <option value="10">Outubro</option>
-                                    <option value="11">Novembro</option>
-                                    <option value="12">Dezembro</option>
-                                </select>
-                                <label for="report-search-ano-043">Ano:</label>
-                                <select id="report-search-ano-043" class="search-input">
-                                    <option value="">Todos os Anos</option>
-                                </select>
-                                <label for="report-search-tipo-043">Tipo:</label>
-                                <select id="report-search-tipo-043" class="search-input">
-                                    <option value="">Crédito e Débito</option>
-                                    <option value="Credito">Crédito</option>
-                                    <option value="Debito">Débito</option>
-                                </select>
+                                <div class="search-group">
+                                    <label for="relatorio-tipo-043">Tipo de Relatório:</label>
+                                    <select id="relatorio-tipo-043" class="search-input">
+                                        <option value="detalhado-completo">Detalhado</option>
+                                        <option value="soma-total">Soma Total (Créditos - Débitos)</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-loja-043">Loja:</label>
+                                    <select id="report-search-loja-043" class="search-input">
+                                        <option value="">Todas as Lojas</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-data-043">Data:</label>
+                                    <input type="date" id="report-search-data-043" class="search-input" placeholder="Data">
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-mes-043">Mês:</label>
+                                    <select id="report-search-mes-043" class="search-input">
+                                        <option value="">Todos os Meses</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-ano-043">Ano:</label>
+                                    <select id="report-search-ano-043" class="search-input">
+                                        <option value="">Todos os Anos</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="report-search-tipo-043">Tipo:</label>
+                                    <select id="report-search-tipo-043" class="search-input">
+                                        <option value="">Crédito e Débito</option>
+                                        <option value="Credito">Crédito</option>
+                                        <option value="Debito">Débito</option>
+                                    </select>
+                                </div>
                             </div>
                             <button id="btn-generate-report-043" class="btn-generate">Gerar Relatório</button>
                         </div>
@@ -377,70 +432,72 @@
                     <section id="lancamento-mensal" class="tab-content active" role="tabpanel" aria-labelledby="lancamento-mensal-tab">
                         <h2 id="lancamento-mensal-title">Lançamento Mensal</h2>
                         <form id="form-lancamento-mensal">
-                            <div class="form-group">
-                                <label for="loja-mensal">Loja:</label>
-                                <select id="loja-mensal" name="loja-mensal" required>
-                                    <option value="">Selecione a Loja</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="loja-mensal">Loja:</label>
+                                    <select id="loja-mensal" name="loja-mensal" required>
+                                        <option value="">Selecione a Loja</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ano-mensal">Ano:</label>
+                                    <select id="ano-mensal" name="ano-mensal" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mes-mensal">Mês:</label>
+                                    <select id="mes-mensal" name="mes-mensal" required>
+                                        <option value="">Selecione o Mês</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="caixa-economica">Caixa Econômica:</label>
+                                    <input type="text" id="caixa-economica" name="caixa-economica" class="mensal-value-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cofre">Cofre:</label>
+                                    <input type="text" id="cofre" name="cofre" class="mensal-value-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="loteria">Loteria:</label>
+                                    <input type="text" id="loteria" name="loteria" class="mensal-value-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pagbankh">PagBank H:</label>
+                                    <input type="text" id="pagbankh" name="pagbankh" class="mensal-value-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="pagbankd">PagBank D:</label>
+                                    <input type="text" id="pagbankd" name="pagbankd" class="mensal-value-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="investimento">Investimento:</label>
+                                    <input type="text" id="investimento" name="investimento" class="mensal-value-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lucro-mes">Lucro Mês:</label>
+                                    <input type="text" id="lucro-mes" name="lucro-mes" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="total-mensal">Total:</label>
+                                    <input type="text" id="total-mensal" name="total-mensal" readonly>
+                                </div>
+                                <button type="submit" class="btn-submit">Lançar Mês</button>
                             </div>
-                            <div class="form-group">
-                                <label for="ano-mensal">Ano:</label>
-                                <select id="ano-mensal" name="ano-mensal" required></select>
-                            </div>
-                            <div class="form-group">
-                                <label for="mes-mensal">Mês:</label>
-                                <select id="mes-mensal" name="mes-mensal" required>
-                                    <option value="">Selecione o Mês</option>
-                                    <option value="01">Janeiro</option>
-                                    <option value="02">Fevereiro</option>
-                                    <option value="03">Março</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Maio</option>
-                                    <option value="06">Junho</option>
-                                    <option value="07">Julho</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Setembro</option>
-                                    <option value="10">Outubro</option>
-                                    <option value="11">Novembro</option>
-                                    <option value="12">Dezembro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="caixa-economica">Caixa Econômica:</label>
-                                <input type="text" id="caixa-economica" name="caixa-economica" class="mensal-value-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cofre">Cofre:</label>
-                                <input type="text" id="cofre" name="cofre" class="mensal-value-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="loteria">Loteria:</label>
-                                <input type="text" id="loteria" name="loteria" class="mensal-value-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="pagbankh">PagBank H:</label>
-                                <input type="text" id="pagbankh" name="pagbankh" class="mensal-value-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="pagbankd">PagBank D:</label>
-                                <input type="text" id="pagbankd" name="pagbankd" class="mensal-value-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="investimento">Investimento:</label>
-                                <input type="text" id="investimento" name="investimento" class="mensal-value-input" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lucro-mes">Lucro Mês:</label>
-                                <input type="text" id="lucro-mes" name="lucro-mes" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="total-mensal">Total:</label>
-                                <input type="text" id="total-mensal" name="total-mensal" readonly>
-                            </div>
-                            <button type="submit" class="btn-submit">Lançar Mês</button>
                         </form>
                     </section>
                     
@@ -448,33 +505,39 @@
                         <h2 id="relatorio-mensal-title">Relatório Mensal</h2>
                         <div class="search-container">
                             <div class="search-fields">
-                                <label for="rel-loja-mensal">Loja:</label>
-                                <select id="rel-loja-mensal" class="search-input">
-                                    <option value="">Todas as Lojas</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                                <label for="rel-ano-mensal">Ano:</label>
-                                <select id="rel-ano-mensal" class="search-input">
-                                    <option value="">Todos os Anos</option>
-                                </select>
-                                <label for="rel-mes-mensal">Mês:</label>
-                                <select id="rel-mes-mensal" class="search-input">
-                                    <option value="">Todos os Meses</option>
-                                    <option value="01">Janeiro</option>
-                                    <option value="02">Fevereiro</option>
-                                    <option value="03">Março</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Maio</option>
-                                    <option value="06">Junho</option>
-                                    <option value="07">Julho</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Setembro</option>
-                                    <option value="10">Outubro</option>
-                                    <option value="11">Novembro</option>
-                                    <option value="12">Dezembro</option>
-                                </select>
+                                <div class="search-group">
+                                    <label for="rel-loja-mensal">Loja:</label>
+                                    <select id="rel-loja-mensal" class="search-input">
+                                        <option value="">Todas as Lojas</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="rel-ano-mensal">Ano:</label>
+                                    <select id="rel-ano-mensal" class="search-input">
+                                        <option value="">Todos os Anos</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="rel-mes-mensal">Mês:</label>
+                                    <select id="rel-mes-mensal" class="search-input">
+                                        <option value="">Todos os Meses</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
                             </div>
                             <button id="btn-generate-relatorio-mensal" class="btn-generate">Gerar Relatório</button>
                         </div>
@@ -486,37 +549,165 @@
                         <h2 id="consulta-mensal-title">Consulta de Lançamentos Mensais</h2>
                         <div class="search-container">
                             <div class="search-fields">
-                                <label for="cons-loja-mensal">Loja:</label>
-                                <select id="cons-loja-mensal" class="search-input">
-                                    <option value="">Todas as Lojas</option>
-                                    <option value="Hero Joquei">Hero Joquei</option>
-                                    <option value="Hero Shopping">Hero Shopping</option>
-                                    <option value="Hero Centro">Hero Centro</option>
-                                </select>
-                                <label for="cons-ano-mensal">Ano:</label>
-                                <select id="cons-ano-mensal" class="search-input">
-                                    <option value="">Todos os Anos</option>
-                                </select>
-                                <label for="cons-mes-mensal">Mês:</label>
-                                <select id="cons-mes-mensal" class="search-input">
-                                    <option value="">Todos os Meses</option>
-                                    <option value="01">Janeiro</option>
-                                    <option value="02">Fevereiro</option>
-                                    <option value="03">Março</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Maio</option>
-                                    <option value="06">Junho</option>
-                                    <option value="07">Julho</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Setembro</option>
-                                    <option value="10">Outubro</option>
-                                    <option value="11">Novembro</option>
-                                    <option value="12">Dezembro</option>
-                                </select>
+                                <div class="search-group">
+                                    <label for="cons-loja-mensal">Loja:</label>
+                                    <select id="cons-loja-mensal" class="search-input">
+                                        <option value="">Todas as Lojas</option>
+                                        <option value="Hero Joquei">Hero Joquei</option>
+                                        <option value="Hero Shopping">Hero Shopping</option>
+                                        <option value="Hero Centro">Hero Centro</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="cons-ano-mensal">Ano:</label>
+                                    <select id="cons-ano-mensal" class="search-input">
+                                        <option value="">Todos os Anos</option>
+                                    </select>
+                                </div>
+                                <div class="search-group">
+                                    <label for="cons-mes-mensal">Mês:</label>
+                                    <select id="cons-mes-mensal" class="search-input">
+                                        <option value="">Todos os Meses</option>
+                                        <option value="01">Janeiro</option>
+                                        <option value="02">Fevereiro</option>
+                                        <option value="03">Março</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Maio</option>
+                                        <option value="06">Junho</option>
+                                        <option value="07">Julho</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
                             </div>
                             <button id="btn-search-mensal" class="btn-search">Consultar</button>
                         </div>
                         <div id="consulta-mensal-resultados" role="region" aria-live="polite"></div>
+                    </section>
+                </div>
+            </div>
+            
+            <div id="praia-container" class="main-tab-content" role="tabpanel" aria-labelledby="praia-container-tab">
+                <aside class="sub-sidebar" aria-label="Navegação da Praia">
+                    <button class="nav-button sub-tab-button active" data-target="praia-caixa" aria-controls="praia-caixa" aria-selected="true" role="tab">Caixa</button>
+                    <button class="nav-button sub-tab-button" data-target="praia-vendas" aria-controls="praia-vendas" aria-selected="false" role="tab">Vendas</button>
+                    <button class="nav-button sub-tab-button" data-target="praia-comprar" aria-controls="praia-comprar" aria-selected="false" role="tab">Comprar</button>
+                    <button class="nav-button sub-tab-button" data-target="praia-relatorios" aria-controls="praia-relatorios" aria-selected="false" role="tab">Relatórios</button>
+                </aside>
+                <div class="sub-content">
+                    
+                    <section id="praia-caixa" class="tab-content active" role="tabpanel" aria-labelledby="praia-caixa-title">
+                        <h2 id="praia-caixa-title">Caixa do Dia</h2>
+                        <form id="form-praia-caixa">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="praia-caixa-data">Data:</label>
+                                    <input type="date" id="praia-caixa-data" name="praia-caixa-data" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-caixa-dinheiro">Dinheiro:</label>
+                                    <input type="text" id="praia-caixa-dinheiro" name="praia-caixa-dinheiro" placeholder="R$ 0,00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-caixa-pix">Pix:</label>
+                                    <input type="text" id="praia-caixa-pix" name="praia-caixa-pix" placeholder="R$ 0,00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-caixa-debito">Débito:</label>
+                                    <input type="text" id="praia-caixa-debito" name="praia-caixa-debito" placeholder="R$ 0,00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-caixa-credito">Crédito:</label>
+                                    <input type="text" id="praia-caixa-credito" name="praia-caixa-credito" placeholder="R$ 0,00" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-caixa-total">Total:</label>
+                                    <input type="text" id="praia-caixa-total" name="praia-caixa-total" placeholder="R$ 0,00" readonly>
+                                </div>
+                                <button type="submit" class="btn-submit">Lançar Caixa</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section id="praia-vendas" class="tab-content" role="tabpanel" aria-labelledby="praia-vendas-title">
+                        <h2 id="praia-vendas-title">Lançamento de Vendas</h2>
+                        <form id="form-praia-vendas">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="praia-vendas-data">Data:</label>
+                                    <input type="date" id="praia-vendas-data" name="praia-vendas-data" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-vendas-tipo">Tipo:</label>
+                                    <select id="praia-vendas-tipo" name="praia-vendas-tipo" required>
+                                        <option value="Caixa">Caixa</option>
+                                        <option value="Dinheiro">Dinheiro</option>
+                                        <option value="Pix">Pix</option>
+                                        <option value="Débito">Débito</option>
+                                        <option value="Crédito">Crédito</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-vendas-descricao">Descrição:</label>
+                                    <input type="text" id="praia-vendas-descricao" name="praia-vendas-descricao" placeholder="Ex: Cerveja, Água, Refri" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-vendas-quantidade">Quantidade:</label>
+                                    <input type="number" id="praia-vendas-quantidade" name="praia-vendas-quantidade" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-vendas-valor">Valor Unitário:</label>
+                                    <input type="text" id="praia-vendas-valor" name="praia-vendas-valor" placeholder="R$ 0,00" required>
+                                </div>
+                                <button type="submit" class="btn-submit">Lançar Venda</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section id="praia-comprar" class="tab-content" role="tabpanel" aria-labelledby="praia-comprar-title">
+                        <h2 id="praia-comprar-title">Registro de Compras</h2>
+                        <form id="form-praia-comprar">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="praia-comprar-data">Data:</label>
+                                    <input type="date" id="praia-comprar-data" name="praia-comprar-data" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-comprar-descricao">Descrição:</label>
+                                    <input type="text" id="praia-comprar-descricao" name="praia-comprar-descricao" placeholder="Ex: Gelo, Cerveja" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="praia-comprar-valor">Valor Total:</label>
+                                    <input type="text" id="praia-comprar-valor" name="praia-comprar-valor" placeholder="R$ 0,00" required>
+                                </div>
+                                <button type="submit" class="btn-submit">Registrar Compra</button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <section id="praia-relatorios" class="tab-content" role="tabpanel" aria-labelledby="praia-relatorios-title">
+                        <h2 id="praia-relatorios-title">Relatórios da Praia</h2>
+                        <div class="search-container">
+                            <div class="search-fields">
+                                <div class="search-group">
+                                    <label for="praia-relatorio-tipo">Tipo de Relatório:</label>
+                                    <select id="praia-relatorio-tipo" class="search-input">
+                                        <option value="diario-caixa">Diário - Caixa</option>
+                                        <option value="periodo-caixa">Por Período - Caixa</option>
+                                        <option value="diario-vendas">Diário - Vendas</option>
+                                        <option value="periodo-vendas">Por Período - Vendas</option>
+                                        <option value="diario-compras">Diário - Compras</option>
+                                        <option value="periodo-compras">Por Período - Compras</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button id="btn-generate-praia-report" class="btn-generate">Gerar Relatório</button>
+                        </div>
+                        <div id="praia-report-results" role="region" aria-live="polite"></div>
+                        <button id="btn-export-excel-praia" style="display: none;">Exportar para Excel</button>
                     </section>
                 </div>
             </div>
