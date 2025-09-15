@@ -52,7 +52,7 @@ body {
 /* Contêiner principal do aplicativo */
 .app-container {
     display: flex;
-    flex-direction: column; /* Padrão mobile: colunas */
+    flex-direction: column;
     flex: 1;
 }
 
@@ -130,14 +130,24 @@ h2, h3 {
 }
 
 /* Formulários */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
 .form-group {
-    margin-bottom: 1.25rem;
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .form-group label {
     display: block;
     font-weight: 600;
-    margin-bottom: 0.5rem;
 }
 
 .form-group input,
@@ -207,6 +217,18 @@ h2, h3 {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+.search-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 150px;
+}
+
+.search-group label {
+    font-weight: 600;
 }
 
 .search-input {
@@ -433,6 +455,7 @@ table tr:last-child td {
 .search-buttons-group {
     display: flex;
     gap: 1rem;
+    align-self: flex-end;
 }
 
 /* A partir daqui, as regras se aplicam apenas a telas maiores que 768px */
@@ -480,19 +503,45 @@ table tr:last-child td {
         padding: 2rem;
     }
 
+    .form-row {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .form-group {
+        flex-basis: calc(16.666% - 1.5rem);
+    }
+    
+    .form-group:nth-last-child(2),
+    .form-group:nth-last-child(3) {
+        flex-grow: 1;
+        min-width: auto;
+    }
+
+    .form-row .btn-submit {
+        flex-basis: auto;
+        width: auto;
+        align-self: flex-end;
+        margin-top: 0;
+    }
+
     .search-container {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: flex-end;
+        gap: 1.5rem;
     }
-    
+
     .search-fields {
         flex-direction: row;
         flex-wrap: wrap;
+        gap: 1.5rem;
+        flex: 1;
     }
 
-    .form-group, .campos-group form {
-        flex-direction: row;
+    .search-group {
+        flex-basis: calc(16.666% - 1.5rem);
     }
     
     .input-with-button {
